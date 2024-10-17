@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "Slack project",
-  "main": "./src/index.js",
+  "main": "./frontend/src/index.js",
   "scripts": {
     "build": "npm run build --prefix frontend",
     "start": "start-server -s ./frontend/dist",
@@ -11,6 +11,10 @@
   "author": "tdd3vlp",
   "license": "ISC",
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.4"
+    "@hexlet/chat-server": "^2.0.4",
+    "react-router-dom": "^6.27.0"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.79.5"
   }
 }
