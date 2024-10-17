@@ -12,5 +12,10 @@ export default {
     toSignup: 'Зарегистрироваться',
     confirmPassword: 'Подтвердите пароль',
     back: 'Назад',
+    logout: 'Выйти',
+    channels: 'Каналы',
+    enterMessage: 'Введите сообщение...',
+    newMessage: 'Новое сообщение',
+    send: 'Отправить',
   },
 };

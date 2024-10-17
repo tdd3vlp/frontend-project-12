@@ -6,7 +6,7 @@ html {
 
 body {
   height: 100%;
-  background-color: #f8f9fa;
+  background-color: rgba(248, 249, 250, 1);
 }
 
 #root {
@@ -15,4 +15,12 @@ body {
 
 img {
   width: 200px;
+}
+
+.input-group div[role='group'] button {
+  // border: 1px solid #ced4da !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-left-radius: 0 !important;
+  margin-left: -1px;
+  margin-left: calc(var(--bs-border-width) * -1);
 }

@@ -14,7 +14,7 @@ export default function NotFoundPage() {
       </Alert>
       <ButtonGroup className=" mb-3">
         <Button variant="secondary">
-          <Link style={{ textDecoration: 'none', color: 'white' }} to="/">
+          <Link className="text-decoration-none" to="/">
             {t('back')}
           </Link>
         </Button>

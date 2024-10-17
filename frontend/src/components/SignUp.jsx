@@ -19,6 +19,7 @@ export default function SignUp() {
     initialValues: {
       name: '',
       password: '',
+      confirmPassword: '',
     },
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
