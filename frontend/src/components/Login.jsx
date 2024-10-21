@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import {
   Container,
@@ -18,11 +19,15 @@ export default function Login() {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
+      username: '',
       password: '',
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      const { username, password } = values;
+      axios.post('http://localhost:5001/api/v1/login', { username, password }).then((response) => {
+        console.log(response.data);
+      });
+      console.log(window.localStorage.getItem('userId'));
     },
   });
   return (
