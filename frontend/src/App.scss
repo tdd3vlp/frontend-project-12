@@ -1,25 +1,5 @@
 @import '../node_modules/bootstrap/scss/bootstrap';
 
-html {
-  height: 100%;
-}
-
-body {
-  height: 100%;
-  background-color: rgba(248, 249, 250, 1);
-}
-
 #root {
   height: 100%;
-}
-
-img {
-  width: 200px;
-}
-
-.input-group div[role='group'] button {
-  border-bottom-left-radius: 0 !important;
-  border-top-left-radius: 0 !important;
-  margin-left: -1px;
-  margin-left: calc(var(--bs-border-width) * -1);
 }
