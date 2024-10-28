@@ -7,15 +7,15 @@ export default function NotFoundPage() {
   return (
     <Col className="m-5 p-3 bg-white shadow-sm rounded">
       <Alert variant="danger">
-        <Alert.Heading>404 Not Found</Alert.Heading>
+        <Alert.Heading>{t('notFound.header')}</Alert.Heading>
 
         <hr />
-        <p className="mb-0">Use the button below to return to the main page.</p>
+        <p className="mb-0">{t('notFound.message')}</p>
       </Alert>
       <ButtonGroup className=" mb-3">
-        <Button variant="secondary">
-          <Link className="text-decoration-none" to="/">
-            {t('back')}
+        <Button variant="primary">
+          <Link className="text-decoration-none text-white" to="/">
+            {t('notFound.linkText')}
           </Link>
         </Button>
       </ButtonGroup>

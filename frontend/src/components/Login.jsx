@@ -1,30 +1,20 @@
-import { useFormik } from 'formik';
 import axios from 'axios';
-import { useTranslation } from 'react-i18next';
-import {
-  Container,
-  Button,
-  ButtonGroup,
-  Image,
-  Card,
-  Row,
-  Col,
-  Form,
-  Navbar,
-} from 'react-bootstrap';
-import { login } from '../features/auth/authSlice';
+import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
+import loginImage from '../assets/sign-in.png';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { serverPaths as paths } from '../routes';
-import logInImg from '../assets/sign-in.png';
+import { login } from '../features/auth/authSlice';
+import { Container, Button, ButtonGroup, Image, Card, Row, Col, Form } from 'react-bootstrap';
 
 export default function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleLogin = (values) => {
-    dispatch(login({ username: values.username }));
+  const handleLogin = (username) => {
+    dispatch(login(username));
     navigate('/');
   };
 
@@ -33,24 +23,20 @@ export default function Login() {
       username: '',
       password: '',
     },
-    onSubmit: async (values) => {
+    onSubmit: async ({ username, password }) => {
       try {
-        const response = await axios.post(paths.loginPath(), values);
-        localStorage.setItem('token', response.data.token);
-        handleLogin(values);
+        const response = await axios.post(paths.loginPath(), { username, password });
+        handleLogin({ username, token: response.data.token });
+        formik.setErrors({ auth: '' });
+        formik.resetForm();
       } catch (loginError) {
-        formik.errors.auth = t('login.authFailed');
-        console.error(t('login.authFailed'), loginError);
+        formik.setErrors({ auth: loginError.response.data.message });
+        console.log('Login error', loginError.response.data);
       }
     },
   });
   return (
     <div className="d-flex flex-column h-100" id="chat">
-      <Navbar variant="light" expand="lg" className="shadow-sm bg-white">
-        <Container>
-          <Navbar.Brand href="/">{t('hexletChat')}</Navbar.Brand>
-        </Container>
-      </Navbar>
       <Container className="h-100" fluid>
         <Row className="justify-content-center align-content-center h-100">
           <Col xs={12} md={8} xxl={6}>
@@ -59,7 +45,7 @@ export default function Login() {
                 <Row>
                   <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
                     <Image
-                      src={logInImg}
+                      src={loginImage}
                       alt={t('signup.submit')}
                       roundedCircle
                       style={{ width: '200px' }}

@@ -1,17 +1,7 @@
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import {
-  Container,
-  Button,
-  ButtonGroup,
-  Image,
-  Card,
-  Row,
-  Col,
-  Form,
-  Navbar,
-} from 'react-bootstrap';
-import signUpImg from '../assets/sign-up.png';
+import { Container, Button, ButtonGroup, Image, Card, Row, Col, Form } from 'react-bootstrap';
+import signupImage from '../assets/sign-up.png';
 
 export default function SignUp() {
   const { t } = useTranslation();
@@ -28,11 +18,6 @@ export default function SignUp() {
   });
   return (
     <div className="d-flex flex-column h-100" id="chat">
-      <Navbar variant="light" expand="lg" className="shadow-sm bg-white">
-        <Container>
-          <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
-        </Container>
-      </Navbar>
       <Container className="h-100" fluid>
         <Row className="justify-content-center align-content-center h-100">
           <Col xs={12} md={8} xxl={6}>
@@ -40,7 +25,7 @@ export default function SignUp() {
               <Card.Body className="flex-column flex-md-row d-flex justify-content-center align-content-center p-5 gap-4">
                 <div className="align-content-center">
                   <Image
-                    src={signUpImg}
+                    src={signupImage}
                     alt={t('login.submit')}
                     roundedCircle
                     style={{ width: '200px' }}

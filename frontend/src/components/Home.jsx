@@ -1,41 +1,62 @@
 import {
   Container,
-  Nav,
   Navbar,
   Button,
   ButtonGroup,
   Row,
   Col,
-  Dropdown,
   Form,
   InputGroup,
 } from 'react-bootstrap';
+import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { useFormik } from 'formik';
+import { useEffect, useRef } from 'react';
 import { logout } from '../features/auth/authSlice';
+import ChannelsList from './ChannelsList';
+import { fetchChannels } from '../features/channels/channelsSlice';
+import { getActiveChannel } from '../features/channels/channelsSlice';
+import MessagesList from './MessagesList';
+import { addMessage } from '../features/messages/messagesSlice';
+import { fetchMessages } from '../features/messages/messagesSlice';
+import { getMessagesLength } from '../features/messages/messagesSlice';
 
 export default function Home() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const inputRef = useRef(null);
+  const activeChannel = useSelector(getActiveChannel);
+  const messagesLength = useSelector(getMessagesLength);
+  const activeChannelId = useSelector((state) => state.channels.activeChannelId);
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    dispatch(fetchChannels());
+    dispatch(fetchMessages());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [activeChannelId]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
     dispatch(logout());
     navigate('/login');
   };
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      password: '',
-      confirmPassword: '',
+      body: '',
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      dispatch(addMessage({ ...values, channelId: activeChannelId, username: user }));
+      formik.resetForm();
     },
   });
   return (
@@ -70,69 +91,35 @@ export default function Home() {
                 </Button>
               </ButtonGroup>
             </div>
-            <Nav
-              as="ul"
-              id="channels-box"
-              className="flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
-            >
-              <Nav.Item as="li" className="w-100">
-                <Button variant="secondary" className="w-100 rounded-0 text-start">
-                  <span className="me-1">#</span>general
-                </Button>
-              </Nav.Item>
-
-              <Nav.Item as="li" className="w-100">
-                <Button variant="light" className="w-100 rounded-0 text-start">
-                  <span className="me-1">#</span>random
-                </Button>
-              </Nav.Item>
-
-              <Nav.Item as="li" className="w-100">
-                <ButtonGroup className="d-flex w-100">
-                  <Button variant="light" className="w-100 rounded-0 text-start text-truncate">
-                    <span className="me-1">#</span>666
-                  </Button>
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      split
-                      variant="light"
-                      id="dropdown-split-basic"
-                      className="flex-grow-0"
-                    >
-                      <span className="visually-hidden">{t('channels.menu')}</span>
-                    </Dropdown.Toggle>
-                  </Dropdown>
-                </ButtonGroup>
-              </Nav.Item>
-            </Nav>
+            <ChannelsList />
           </Col>
           <Col className="p-0 h-100">
             <div className="d-flex flex-column h-100">
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 <p className="m-0">
-                  <b># general</b>
+                  <b># {activeChannel}</b>
                 </p>
-                <span className="text-muted">0 {t('chat.messageCount_zero')}</span>
+                <span className="text-muted">
+                  {messagesLength} {t('chat.messageCount', { count: messagesLength })}
+                </span>
               </div>
-              <div className="chat-messages overflow-auto px-5 " id="messages-box">
-                <div className="text-break mb-2">
-                  <b>admin</b>: Привет!
-                </div>
-              </div>
+              <MessagesList channelId={activeChannelId} />
               <div className="mt-auto px-5 py-3">
                 <Form noValidate className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
-                  <InputGroup hasValidation>
+                  <InputGroup hasValidation={!formik.values.body}>
                     <Form.Control
+                      ref={inputRef}
+                      autoFocus
                       name="body"
                       aria-label={t('newMessage')}
                       className="border-0 p-0 ps-2"
                       placeholder={t('chat.enterMessage')}
                       onChange={formik.handleChange}
-                      value={formik.values.newMessage}
+                      value={formik.values.body}
                     />
                     <Button
                       type="submit"
-                      disabled
+                      disabled={!formik.values.body}
                       variant="outline-secondary"
                       className="btn-group-vertical"
                     >
@@ -148,7 +135,7 @@ export default function Home() {
                           d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"
                         ></path>
                       </svg>
-                      <span className="visually-hidden">Отправить</span>
+                      <span className="visually-hidden">{t('chat.send')}</span>
                     </Button>
                   </InputGroup>
                 </Form>

@@ -60,7 +60,7 @@ const ru = {
     notFound: {
       header: 'Страница не найдена',
       message: 'Но вы можете перейти ',
-      linkText: 'на главную страницу',
+      linkText: 'На главную страницу',
     },
     errors: {
       network: 'Ошибка соединения',
