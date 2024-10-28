@@ -4,8 +4,15 @@ import App from './components/App.jsx';
 import resources from './locales/index.js';
 import { Provider } from 'react-redux';
 import store from './app/store';
+import { io } from 'socket.io-client';
 
 const init = async () => {
+  const socket = io();
+  socket.connect();
+  socket.on('connect', () => {
+    console.log('connected');
+  });
+
   const i18n = i18next.createInstance();
 
   await i18n.use(initReactI18next).init({
@@ -24,5 +31,4 @@ const init = async () => {
 
 export default init;
 
-// Приватные роуты (Home должен быть приватным).
 // Сокеты должны быть инициализивароны в init().
