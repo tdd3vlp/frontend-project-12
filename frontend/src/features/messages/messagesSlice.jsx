@@ -40,7 +40,13 @@ const messagesSlice = createSlice({
     status: fetchStatus.Idle,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    addNewMessage: (state, action) => {
+      const newMessage = action.payload;
+      state.byId[newMessage.id] = newMessage;
+      state.allIds.push(newMessage.id);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMessages.pending, (state) => {
@@ -60,6 +66,7 @@ const messagesSlice = createSlice({
       .addCase(addMessage.fulfilled, (state, action) => {
         const message = action.payload;
         state.byId[message.id] = message;
+        state.allIds.push(message.id);
       });
   },
 });
@@ -72,5 +79,6 @@ export const getMessagesLength = (state) => {
   }).length;
 };
 
+export const { addNewMessage } = messagesSlice.actions;
 export { fetchMessages, addMessage };
 export default messagesSlice.reducer;

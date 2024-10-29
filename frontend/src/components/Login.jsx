@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useFormik } from 'formik';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import loginImage from '../assets/sign-in.png';
 import { useTranslation } from 'react-i18next';
@@ -97,7 +98,7 @@ export default function Login() {
               <Card.Footer className="p-4">
                 <div className="text-center">
                   <span>{t('login.newToChat')}&nbsp;</span>
-                  <a href="/signup">{t('login.signup')}</a>
+                  <Link to="/signup">{t('login.signup')}</Link>
                 </div>
               </Card.Footer>
             </Card>

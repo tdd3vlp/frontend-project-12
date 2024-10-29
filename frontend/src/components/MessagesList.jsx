@@ -11,7 +11,6 @@ const MessagesList = ({ channelId }) => {
           return (
             <div className="text-break mb-2" key={message.id}>
               <b>{message.username}</b>: {message.body}
-              {socket.emit('message', message)}
               <br />
             </div>
           );

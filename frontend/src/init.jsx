@@ -5,15 +5,29 @@ import resources from './locales/index.js';
 import { Provider } from 'react-redux';
 import store from './app/store';
 import { io } from 'socket.io-client';
+import { addNewMessage } from './features/messages/messagesSlice.jsx';
 
 const init = async () => {
-  const socket = io();
-  socket.connect();
-  socket.on('connect', () => {
-    console.log('connected');
+  const i18n = i18next.createInstance();
+
+  const socket = io('http://localhost:5001', {
+    withCredentials: true,
+    transports: ['websocket'],
   });
 
-  const i18n = i18next.createInstance();
+  socket.on('newMessage', (payload) => {
+    return new Promise((resolve, reject) => {
+      if (socket.connected) {
+        resolve(store.dispatch(addNewMessage(payload)));
+      } else {
+        reject(new Error(i18n.t('errors.network')));
+      }
+    });
+  });
+
+  socket.on('newChannel', (payload) => {
+    console.log(payload); // { id: 6, name: "new channel", removable: true }
+  });
 
   await i18n.use(initReactI18next).init({
     resources,
@@ -30,5 +44,3 @@ const init = async () => {
 };
 
 export default init;
-
-// Сокеты должны быть инициализивароны в init().

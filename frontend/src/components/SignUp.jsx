@@ -2,18 +2,43 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { Container, Button, ButtonGroup, Image, Card, Row, Col, Form } from 'react-bootstrap';
 import signupImage from '../assets/sign-up.png';
+import * as yup from 'yup';
+import axios from 'axios';
+import { serverPaths as paths } from '../routes';
+import { useNavigate } from 'react-router-dom';
+
+const schema = yup.object({
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(4, 'Your password is too short.')
+    .matches(/[a-zA-Z0-9]/, 'Password can only contain Latin letters.'),
+  confirmPassword: yup.string().oneOf([yup.ref('password')], 'Passwords must match'),
+});
 
 export default function SignUp() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      name: '',
+      username: '',
       password: '',
       confirmPassword: '',
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async ({ username, password }) => {
+      const isValidated = await schema.validate({ username, password });
+      if (isValidated) {
+        try {
+          await axios.post(paths.signupPath(), { username, password });
+          navigate('/');
+          formik.setErrors({ auth: '' });
+          formik.resetForm();
+        } catch (sigupError) {
+          formik.setErrors({ auth: sigupError.response.data.message });
+          console.log('Signup error', sigupError.response.data);
+        }
+      }
     },
   });
   return (
