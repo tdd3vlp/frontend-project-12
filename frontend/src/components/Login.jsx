@@ -88,7 +88,12 @@ export default function Login() {
                     </Form.Floating>
 
                     <ButtonGroup className="w-100 mb-3">
-                      <Button variant="outline-primary" type="submit" className="w-100">
+                      <Button
+                        variant="outline-primary"
+                        type="submit"
+                        className="w-100"
+                        disabled={formik.isSubmitting}
+                      >
                         {t('login.submit')}
                       </Button>
                     </ButtonGroup>

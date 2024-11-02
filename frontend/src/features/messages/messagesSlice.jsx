@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { serverPaths as paths } from '../../routes';
 import fetchStatus from '../../utils/fetchStatus';
+import { removeChannel } from '../channels/channelsSlice';
 import axios from 'axios';
 
 const fetchMessages = createAsyncThunk('messages/fetchMessages', async () => {
@@ -41,7 +42,7 @@ const messagesSlice = createSlice({
     error: null,
   },
   reducers: {
-    addNewMessage: (state, action) => {
+    handleAddMessage: (state, action) => {
       const newMessage = action.payload;
       state.byId[newMessage.id] = newMessage;
       state.allIds.push(newMessage.id);
@@ -67,6 +68,16 @@ const messagesSlice = createSlice({
         const message = action.payload;
         state.byId[message.id] = message;
         state.allIds.push(message.id);
+      })
+      .addCase(removeChannel.fulfilled, (state, action) => {
+        const { id } = action.payload;
+        const messages = state.byId;
+        Object.values(messages).filter((message) => {
+          if (message.channelId === id) {
+            delete state.byId[message.id];
+            state.allIds = state.allIds.filter((messageId) => messageId !== message.id);
+          }
+        });
       });
   },
 });
@@ -79,6 +90,6 @@ export const getMessagesLength = (state) => {
   }).length;
 };
 
-export const { addNewMessage } = messagesSlice.actions;
+export const { handleAddMessage } = messagesSlice.actions;
 export { fetchMessages, addMessage };
 export default messagesSlice.reducer;

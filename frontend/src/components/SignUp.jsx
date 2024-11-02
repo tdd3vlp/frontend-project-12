@@ -7,18 +7,19 @@ import axios from 'axios';
 import { serverPaths as paths } from '../routes';
 import { useNavigate } from 'react-router-dom';
 
-const schema = yup.object({
-  password: yup
-    .string()
-    .required('Password is required')
-    .min(4, 'Your password is too short.')
-    .matches(/[a-zA-Z0-9]/, 'Password can only contain Latin letters.'),
-  confirmPassword: yup.string().oneOf([yup.ref('password')], 'Passwords must match'),
-});
-
 export default function SignUp() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const schema = yup.object({
+    username: yup
+      .string()
+      .required(t('signup.required'))
+      .min(3, t('signup.usernameConstraints'))
+      .max(20, t('signup.usernameConstraints')),
+    password: yup.string().required(t('signup.required')).min(6, t('signup.passMin')),
+    confirmPassword: yup.string().oneOf([yup.ref('password')], t('signup.mustMatch')),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -26,17 +27,25 @@ export default function SignUp() {
       password: '',
       confirmPassword: '',
     },
-    onSubmit: async ({ username, password }) => {
-      const isValidated = await schema.validate({ username, password });
-      if (isValidated) {
-        try {
-          await axios.post(paths.signupPath(), { username, password });
-          navigate('/');
-          formik.setErrors({ auth: '' });
-          formik.resetForm();
-        } catch (sigupError) {
-          formik.setErrors({ auth: sigupError.response.data.message });
-          console.log('Signup error', sigupError.response.data);
+    validationSchema: schema,
+    validateOnChange: false,
+
+    onSubmit: async (values) => {
+      try {
+        await axios.post(paths.signupPath(), {
+          username: values.username,
+          password: values.password,
+        });
+        navigate('/');
+        formik.resetForm();
+      } catch (signupError) {
+        console.log('Sign up error', signupError.response.data);
+        if (signupError.response.data.statusCode === 409) {
+          formik.setErrors({
+            username: ' ',
+            password: ' ',
+            confirmPassword: t('signup.alreadyExists'),
+          });
         }
       }
     },
@@ -66,14 +75,17 @@ export default function SignUp() {
                       name="username"
                       autoComplete="username"
                       required
-                      placeholder={t('signup.username')}
+                      placeholder={t('signup.usernameConstraints')}
                       id="username"
                       onChange={formik.handleChange}
                       value={formik.values.username}
+                      isInvalid={!!formik.errors.username}
                       autoFocus
                     />
                     <Form.Label>{t('signup.username')}</Form.Label>
-                    <Form.Control.Feedback type="invalid" tooltip></Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid" tooltip>
+                      {formik.errors.username || t('signup.usernameConstraints')}
+                    </Form.Control.Feedback>
                   </Form.Floating>
                   <Form.Floating className="mb-3">
                     <Form.Control
@@ -81,13 +93,16 @@ export default function SignUp() {
                       name="password"
                       autoComplete="current-password"
                       required
-                      placeholder={t('signup.password')}
+                      placeholder={t('signup.passMin')}
                       id="password"
                       onChange={formik.handleChange}
                       value={formik.values.password}
+                      isInvalid={!!formik.errors.password}
                     />
                     <Form.Label>{t('signup.password')}</Form.Label>
-                    <Form.Control.Feedback type="invalid" tooltip></Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid" tooltip>
+                      {formik.errors.password || t('signup.passMin')}
+                    </Form.Control.Feedback>
                   </Form.Floating>
                   <Form.Floating className="mb-4">
                     <Form.Control
@@ -95,13 +110,16 @@ export default function SignUp() {
                       name="confirmPassword"
                       autoComplete="new-password"
                       required
-                      placeholder={t('signup.confirm')}
+                      placeholder={t('signup.mustMatch')}
                       id="confirmPassword"
                       onChange={formik.handleChange}
                       value={formik.values.confirmPassword}
+                      isInvalid={!!formik.errors.confirmPassword}
                     />
                     <Form.Label>{t('signup.confirm')}</Form.Label>
-                    <Form.Control.Feedback type="invalid" tooltip></Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid" tooltip>
+                      {formik.errors.confirmPassword || t('signup.usernameConstraints')}
+                    </Form.Control.Feedback>
                   </Form.Floating>
                   <ButtonGroup className="w-100">
                     <Button variant="outline-primary" type="submit" className="w-100">

@@ -23,6 +23,10 @@ import MessagesList from './MessagesList';
 import { addMessage } from '../features/messages/messagesSlice';
 import { fetchMessages } from '../features/messages/messagesSlice';
 import { getMessagesLength } from '../features/messages/messagesSlice';
+import { openAddChannelModal } from '../features/modals/modalSlice';
+import AddChannelModal from './AddChannelModal';
+import RemoveChannelModal from './RemoveChannelModal';
+import RenameChannelModal from './RenameChannelModal';
 
 export default function Home() {
   const { t } = useTranslation();
@@ -38,12 +42,6 @@ export default function Home() {
     dispatch(fetchChannels());
     dispatch(fetchMessages());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [activeChannelId]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -77,7 +75,11 @@ export default function Home() {
             <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
               <b>{t('channels.channels')}</b>
               <ButtonGroup vertical>
-                <Button variant="link" className="text-primary p-0">
+                <Button
+                  variant="link"
+                  className="text-primary p-0"
+                  onClick={() => dispatch(openAddChannelModal())}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 16 16"
@@ -109,7 +111,6 @@ export default function Home() {
                   <InputGroup hasValidation={!formik.values.body}>
                     <Form.Control
                       ref={inputRef}
-                      autoFocus
                       name="body"
                       aria-label={t('newMessage')}
                       className="border-0 p-0 ps-2"
@@ -119,7 +120,7 @@ export default function Home() {
                     />
                     <Button
                       type="submit"
-                      disabled={!formik.values.body}
+                      disabled={!formik.values.body || formik.isSubmitting}
                       variant="outline-secondary"
                       className="btn-group-vertical"
                     >
@@ -144,6 +145,9 @@ export default function Home() {
           </Col>
         </Row>
       </Container>
+      <AddChannelModal />
+      <RemoveChannelModal />
+      <RenameChannelModal />
     </div>
   );
 }

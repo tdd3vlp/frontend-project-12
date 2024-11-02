@@ -5,7 +5,10 @@ import resources from './locales/index.js';
 import { Provider } from 'react-redux';
 import store from './app/store';
 import { io } from 'socket.io-client';
-import { addNewMessage } from './features/messages/messagesSlice.jsx';
+import { handleAddMessage } from './features/messages/messagesSlice.jsx';
+import { handleAddChannel } from './features/channels/channelsSlice.jsx';
+import { handleRemoveChannel } from './features/channels/channelsSlice.jsx';
+import { handleRenameChannel } from './features/channels/channelsSlice.jsx';
 
 const init = async () => {
   const i18n = i18next.createInstance();
@@ -18,15 +21,45 @@ const init = async () => {
   socket.on('newMessage', (payload) => {
     return new Promise((resolve, reject) => {
       if (socket.connected) {
-        resolve(store.dispatch(addNewMessage(payload)));
+        resolve(store.dispatch(handleAddMessage(payload)));
       } else {
+        console.error('Network error');
         reject(new Error(i18n.t('errors.network')));
       }
     });
   });
 
   socket.on('newChannel', (payload) => {
-    console.log(payload); // { id: 6, name: "new channel", removable: true }
+    return new Promise((resolve, reject) => {
+      if (socket.connected) {
+        resolve(store.dispatch(handleAddChannel(payload)));
+      } else {
+        console.error('Network error');
+        reject(new Error(i18n.t('errors.network')));
+      }
+    });
+  });
+
+  socket.on('removeChannel', (payload) => {
+    return new Promise((resolve, reject) => {
+      if (socket.connected) {
+        resolve(store.dispatch(handleRemoveChannel(payload)));
+      } else {
+        console.error('Network error');
+        reject(new Error(i18n.t('errors.network')));
+      }
+    });
+  });
+
+  socket.on('renameChannel', (payload) => {
+    return new Promise((resolve, reject) => {
+      if (socket.connected) {
+        resolve(store.dispatch(handleRenameChannel(payload)));
+      } else {
+        console.error('Network error');
+        reject(new Error(i18n.t('errors.network')));
+      }
+    });
   });
 
   await i18n.use(initReactI18next).init({
