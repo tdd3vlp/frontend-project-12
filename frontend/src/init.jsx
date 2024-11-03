@@ -1,10 +1,10 @@
 import i18next from 'i18next';
-import { I18nextProvider, initReactI18next } from 'react-i18next';
-import App from './components/App.jsx';
-import resources from './locales/index.js';
-import { Provider } from 'react-redux';
 import store from './app/store';
 import { io } from 'socket.io-client';
+import { Provider } from 'react-redux';
+import App from './components/App.jsx';
+import resources from './locales/index.js';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { handleAddMessage } from './features/messages/messagesSlice.jsx';
 import { handleAddChannel } from './features/channels/channelsSlice.jsx';
 import { handleRemoveChannel } from './features/channels/channelsSlice.jsx';
@@ -24,7 +24,7 @@ const init = async () => {
         resolve(store.dispatch(handleAddMessage(payload)));
       } else {
         console.error('Network error');
-        reject(new Error(i18n.t('errors.network')));
+        reject();
       }
     });
   });
@@ -34,8 +34,8 @@ const init = async () => {
       if (socket.connected) {
         resolve(store.dispatch(handleAddChannel(payload)));
       } else {
-        console.error('Network error');
-        reject(new Error(i18n.t('errors.network')));
+        console.log(i18n.t('errors.network'));
+        reject();
       }
     });
   });
@@ -45,8 +45,8 @@ const init = async () => {
       if (socket.connected) {
         resolve(store.dispatch(handleRemoveChannel(payload)));
       } else {
-        console.error('Network error');
-        reject(new Error(i18n.t('errors.network')));
+        console.log(i18n.t('errors.network'));
+        reject();
       }
     });
   });
@@ -56,10 +56,14 @@ const init = async () => {
       if (socket.connected) {
         resolve(store.dispatch(handleRenameChannel(payload)));
       } else {
-        console.error('Network error');
-        reject(new Error(i18n.t('errors.network')));
+        console.log(i18n.t('errors.network'));
+        reject();
       }
     });
+  });
+
+  socket.on('disconnect', (reason) => {
+    console.log('Disconnected from server', reason);
   });
 
   await i18n.use(initReactI18next).init({

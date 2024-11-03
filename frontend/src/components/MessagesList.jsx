@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 
 // eslint-disable-next-line react/prop-types
-const MessagesList = ({ channelId }) => {
+export default function MessagesList({ channelId }) {
   const messages = useSelector((state) => state.messages.byId);
 
   return (
@@ -19,6 +19,4 @@ const MessagesList = ({ channelId }) => {
       })}
     </div>
   );
-};
-
-export default MessagesList;
+}

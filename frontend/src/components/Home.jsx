@@ -1,13 +1,4 @@
-import {
-  Container,
-  Navbar,
-  Button,
-  ButtonGroup,
-  Row,
-  Col,
-  Form,
-  InputGroup,
-} from 'react-bootstrap';
+import { Container, Navbar, Button, Row, Col, Form, InputGroup } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -27,26 +18,18 @@ import { openAddChannelModal } from '../features/modals/modalSlice';
 import AddChannelModal from './AddChannelModal';
 import RemoveChannelModal from './RemoveChannelModal';
 import RenameChannelModal from './RenameChannelModal';
+import { PlusSquare } from 'react-bootstrap-icons';
+import { ArrowRightSquare } from 'react-bootstrap-icons';
 
 export default function Home() {
+  const inputRef = useRef(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const inputRef = useRef(null);
   const activeChannel = useSelector(getActiveChannel);
+  const user = useSelector((state) => state.auth.user);
   const messagesLength = useSelector(getMessagesLength);
   const activeChannelId = useSelector((state) => state.channels.activeChannelId);
-  const user = useSelector((state) => state.auth.user);
-
-  useEffect(() => {
-    dispatch(fetchChannels());
-    dispatch(fetchMessages());
-  }, [dispatch]);
-
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -57,6 +40,25 @@ export default function Home() {
       formik.resetForm();
     },
   });
+
+  // Load channels and messages
+  useEffect(() => {
+    dispatch(fetchChannels());
+    dispatch(fetchMessages());
+  }, [dispatch]);
+
+  // Focus on input
+  useEffect(() => {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 200);
+  }, [activeChannelId]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
+
   return (
     <div className="d-flex flex-column h-100" id="chat">
       <Navbar variant="light" expand="lg" className="shadow-sm bg-white">
@@ -74,24 +76,13 @@ export default function Home() {
           <Col xs={4} md={2} className="border-end bg-light d-flex flex-column h-100 p-0">
             <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
               <b>{t('channels.channels')}</b>
-              <ButtonGroup vertical>
-                <Button
-                  variant="link"
-                  className="text-primary p-0"
-                  onClick={() => dispatch(openAddChannelModal())}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                    width="20"
-                    height="20"
-                    fill="currentColor"
-                  >
-                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                  </svg>
-                </Button>
-              </ButtonGroup>
+              <Button
+                variant="link"
+                className="text-primary p-0"
+                onClick={() => dispatch(openAddChannelModal())}
+              >
+                <PlusSquare />
+              </Button>
             </div>
             <ChannelsList />
           </Col>
@@ -124,18 +115,7 @@ export default function Home() {
                       variant="outline-secondary"
                       className="btn-group-vertical"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 16 16"
-                        width="20"
-                        height="20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"
-                        ></path>
-                      </svg>
+                      <ArrowRightSquare />
                       <span className="visually-hidden">{t('chat.send')}</span>
                     </Button>
                   </InputGroup>

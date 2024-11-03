@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { removeChannel } from '../features/channels/channelsSlice';
 import { closeRemoveChannelModal } from '../features/modals/modalSlice';
 
-const RemoveChannelModal = () => {
+export default function RemoveChannelModal() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { isOpen, channelId } = useSelector((state) => state.modals.removeChannelModal);
@@ -34,6 +34,4 @@ const RemoveChannelModal = () => {
       </Modal.Body>
     </Modal>
   );
-};
-
-export default RemoveChannelModal;
+}

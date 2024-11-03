@@ -1,6 +1,6 @@
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -8,6 +8,7 @@ import { addChannel } from '../features/channels/channelsSlice';
 import { closeAddChannelModal } from '../features/modals/modalSlice';
 
 export default function AddChannelModal() {
+  const inputRef = useRef(null);
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.modals.addChannelModal.isOpen);
@@ -23,20 +24,28 @@ export default function AddChannelModal() {
       .notOneOf(channelsNames, t('modals.uniq')),
   });
 
-  const handleCloseModal = () => {
-    dispatch(closeAddChannelModal());
-    formik.resetForm();
-  };
-
   const formik = useFormik({
     initialValues: { name: '' },
     validationSchema: schema,
+    validateOnChange: false,
     onSubmit: (values) => {
       dispatch(addChannel({ name: values.name }));
       handleCloseModal();
       formik.resetForm();
     },
   });
+
+  // Focus on input
+  useEffect(() => {
+    if (isOpen) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]);
+
+  const handleCloseModal = () => {
+    dispatch(closeAddChannelModal());
+    formik.resetForm();
+  };
 
   return (
     <Modal show={isOpen} centered onHide={handleCloseModal}>
@@ -47,7 +56,7 @@ export default function AddChannelModal() {
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group>
             <Form.Control
-              autoFocus
+              ref={inputRef}
               type="text"
               name="name"
               onChange={formik.handleChange}

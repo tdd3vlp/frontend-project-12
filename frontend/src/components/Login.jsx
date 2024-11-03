@@ -28,11 +28,18 @@ export default function Login() {
       try {
         const response = await axios.post(paths.loginPath(), { username, password });
         handleLogin({ username, token: response.data.token });
-        formik.setErrors({ auth: '' });
         formik.resetForm();
       } catch (loginError) {
-        formik.setErrors({ auth: loginError.response.data.message });
-        console.log('Login error', loginError.response.data);
+        if (loginError.message === 'Network Error') {
+          console.log(t('errors.network'));
+        }
+
+        if (loginError.response.data.statusCode === 401) {
+          formik.setErrors({
+            name: ' ',
+            password: ' ',
+          });
+        }
       }
     },
   });
@@ -65,7 +72,7 @@ export default function Login() {
                         id="username"
                         onChange={formik.handleChange}
                         value={formik.values.username}
-                        isInvalid={formik.errors.auth}
+                        isInvalid={!!formik.errors.name}
                       />
                       <Form.Label>{t('login.username')}</Form.Label>
                     </Form.Floating>
@@ -79,7 +86,7 @@ export default function Login() {
                         id="password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
-                        isInvalid={formik.errors.auth}
+                        isInvalid={!!formik.errors.password}
                       />
                       <Form.Label>{t('login.password')}</Form.Label>
                       <Form.Control.Feedback type="invalid" tooltip>

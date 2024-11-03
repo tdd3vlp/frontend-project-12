@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { openRemoveChannelModal } from '../features/modals/modalSlice';
 import { openRenameChannelModal } from '../features/modals/modalSlice';
 
-const ChannelsList = () => {
+export default function ChannelsList() {
   const dispatch = useDispatch();
   const { byId: channels, activeChannelId } = useSelector((state) => state.channels);
   const { t } = useTranslation();
@@ -70,6 +70,4 @@ const ChannelsList = () => {
       ))}
     </Nav>
   );
-};
-
-export default ChannelsList;
+}

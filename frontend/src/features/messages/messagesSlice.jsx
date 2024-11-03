@@ -20,7 +20,6 @@ const fetchMessages = createAsyncThunk('messages/fetchMessages', async () => {
 
 const addMessage = createAsyncThunk('messages/addMessage', async (newMessage) => {
   const token = localStorage.getItem('token');
-
   try {
     const response = await axios.post(paths.messagesPath(), newMessage, {
       headers: {
@@ -68,6 +67,10 @@ const messagesSlice = createSlice({
         const message = action.payload;
         state.byId[message.id] = message;
         state.allIds.push(message.id);
+      })
+      .addCase(addMessage.rejected, (state, action) => {
+        state.status = fetchStatus.Failed;
+        state.error = action.error.message;
       })
       .addCase(removeChannel.fulfilled, (state, action) => {
         const { id } = action.payload;

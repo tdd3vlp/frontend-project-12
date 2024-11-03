@@ -1,7 +1,7 @@
 import { Navbar, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-const withNavbar = (WrappedComponent) => {
+export default function withNavbar(WrappedComponent) {
   const ComponentWithNav = (props) => {
     const { t } = useTranslation();
     return (
@@ -16,6 +16,4 @@ const withNavbar = (WrappedComponent) => {
     );
   };
   return <ComponentWithNav />;
-};
-
-export default withNavbar;
+}

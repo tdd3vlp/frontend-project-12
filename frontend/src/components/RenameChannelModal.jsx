@@ -8,6 +8,7 @@ import { renameChannel } from '../features/channels/channelsSlice';
 import { useEffect, useRef } from 'react';
 
 export default function RenameChannelModal() {
+  const inputRef = useRef(null);
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const {
@@ -24,12 +25,13 @@ export default function RenameChannelModal() {
       .max(20, t('modals.max')),
   });
 
-  const inputRef = useRef(null);
-
+  // Focus on input
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
-      setTimeout(() => inputRef.current.select(), 1);
+    if (isOpen) {
+      setTimeout(() => {
+        inputRef.current.focus();
+        inputRef.current.select();
+      }, 100);
     }
   }, [isOpen]);
 

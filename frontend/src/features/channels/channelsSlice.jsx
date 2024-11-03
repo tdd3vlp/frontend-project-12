@@ -120,6 +120,7 @@ const channelsSlice = createSlice({
           state.byId[channel.id] = channel;
           state.allIds.push(channel.id);
         }
+
         state.activeChannelId = channel.id;
       })
       .addCase(removeChannel.fulfilled, (state, action) => {

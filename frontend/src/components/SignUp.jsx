@@ -6,10 +6,13 @@ import * as yup from 'yup';
 import axios from 'axios';
 import { serverPaths as paths } from '../routes';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../features/auth/authSlice';
+import { useDispatch } from 'react-redux';
 
 export default function SignUp() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const schema = yup.object({
     username: yup
@@ -32,14 +35,18 @@ export default function SignUp() {
 
     onSubmit: async (values) => {
       try {
-        await axios.post(paths.signupPath(), {
+        const response = await axios.post(paths.signupPath(), {
           username: values.username,
           password: values.password,
         });
+        dispatch(login(response.data));
         navigate('/');
         formik.resetForm();
       } catch (signupError) {
-        console.log('Sign up error', signupError.response.data);
+        if (signupError.message === 'Network Error') {
+          console.log(t('errors.network'));
+        }
+
         if (signupError.response.data.statusCode === 409) {
           formik.setErrors({
             username: ' ',
