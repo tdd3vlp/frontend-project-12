@@ -9,10 +9,9 @@ import { handleAddMessage } from './features/messages/messagesSlice.jsx';
 import { handleAddChannel } from './features/channels/channelsSlice.jsx';
 import { handleRemoveChannel } from './features/channels/channelsSlice.jsx';
 import { handleRenameChannel } from './features/channels/channelsSlice.jsx';
+import { toast } from 'react-toastify';
 
 const init = async () => {
-  const i18n = i18next.createInstance();
-
   const socket = io('http://localhost:5001', {
     withCredentials: true,
     transports: ['websocket'],
@@ -33,6 +32,7 @@ const init = async () => {
     return new Promise((resolve, reject) => {
       if (socket.connected) {
         resolve(store.dispatch(handleAddChannel(payload)));
+        toast.success(i18n.t('channels.created'));
       } else {
         console.log(i18n.t('errors.network'));
         reject();
@@ -44,6 +44,7 @@ const init = async () => {
     return new Promise((resolve, reject) => {
       if (socket.connected) {
         resolve(store.dispatch(handleRemoveChannel(payload)));
+        toast.success(i18n.t('channels.removed'));
       } else {
         console.log(i18n.t('errors.network'));
         reject();
@@ -55,6 +56,7 @@ const init = async () => {
     return new Promise((resolve, reject) => {
       if (socket.connected) {
         resolve(store.dispatch(handleRenameChannel(payload)));
+        toast.success(i18n.t('channels.renamed'));
       } else {
         console.log(i18n.t('errors.network'));
         reject();
@@ -62,9 +64,7 @@ const init = async () => {
     });
   });
 
-  socket.on('disconnect', (reason) => {
-    console.log('Disconnected from server', reason);
-  });
+  const i18n = i18next.createInstance();
 
   await i18n.use(initReactI18next).init({
     resources,

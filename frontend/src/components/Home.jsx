@@ -20,6 +20,7 @@ import RemoveChannelModal from './RemoveChannelModal';
 import RenameChannelModal from './RenameChannelModal';
 import { PlusSquare } from 'react-bootstrap-icons';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
+import Filter from 'leo-profanity';
 
 export default function Home() {
   const inputRef = useRef(null);
@@ -36,6 +37,8 @@ export default function Home() {
       body: '',
     },
     onSubmit: (values) => {
+      const filteredBody = Filter.clean(values.body);
+      values.body = filteredBody;
       dispatch(addMessage({ ...values, channelId: activeChannelId, username: user }));
       formik.resetForm();
     },

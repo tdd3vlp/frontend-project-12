@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { closeRenameChannelModal } from '../features/modals/modalSlice';
 import { renameChannel } from '../features/channels/channelsSlice';
 import { useEffect, useRef } from 'react';
+import Filter from 'leo-profanity';
 
 export default function RenameChannelModal() {
   const inputRef = useRef(null);
@@ -39,7 +40,10 @@ export default function RenameChannelModal() {
     initialValues: { name: channelName },
     enableReinitialize: true,
     validationSchema: schema,
+    validateOnChange: false,
     onSubmit: (values) => {
+      const filteredName = Filter.clean(values.name, '*', 2);
+      values.name = filteredName;
       dispatch(renameChannel({ id: channelId, name: values }));
       dispatch(closeRenameChannelModal());
       formik.resetForm();

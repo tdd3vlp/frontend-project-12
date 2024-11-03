@@ -20,16 +20,12 @@ const fetchMessages = createAsyncThunk('messages/fetchMessages', async () => {
 
 const addMessage = createAsyncThunk('messages/addMessage', async (newMessage) => {
   const token = localStorage.getItem('token');
-  try {
-    const response = await axios.post(paths.messagesPath(), newMessage, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (addMessageError) {
-    console.error('addMessageError', addMessageError);
-  }
+  const response = await axios.post(paths.messagesPath(), newMessage, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
 });
 
 const messagesSlice = createSlice({

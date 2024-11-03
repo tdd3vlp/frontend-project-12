@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { addChannel } from '../features/channels/channelsSlice';
 import { closeAddChannelModal } from '../features/modals/modalSlice';
+import Filter from 'leo-profanity';
 
 export default function AddChannelModal() {
   const inputRef = useRef(null);
@@ -29,6 +30,8 @@ export default function AddChannelModal() {
     validationSchema: schema,
     validateOnChange: false,
     onSubmit: (values) => {
+      const filteredName = Filter.clean(values.name, '*', 2);
+      values.name = filteredName;
       dispatch(addChannel({ name: values.name }));
       handleCloseModal();
       formik.resetForm();

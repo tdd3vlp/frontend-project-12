@@ -19,17 +19,12 @@ const fetchChannels = createAsyncThunk('channels/fetchChannels', async () => {
 
 const addChannel = createAsyncThunk('channels/addChannel', async (newChannel) => {
   const token = localStorage.getItem('token');
-
-  try {
-    const response = await axios.post(paths.channelsPath(), newChannel, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (addChannelError) {
-    console.error('addChannelError', addChannelError);
-  }
+  const response = await axios.post(paths.channelsPath(), newChannel, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
 });
 
 const removeChannel = createAsyncThunk('channels/removeChannel', async (id) => {
