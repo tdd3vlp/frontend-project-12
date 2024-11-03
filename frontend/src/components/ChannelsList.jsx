@@ -44,7 +44,9 @@ export default function ChannelsList() {
               <Dropdown.Toggle
                 split
                 variant={activeChannelId === channelId ? 'secondary' : 'light'}
-              />
+              >
+                <span className="visually-hidden">{t('channels.menu')}</span>
+              </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => handleRemoveChannel(channelId)}>
                   {t('channels.remove')}

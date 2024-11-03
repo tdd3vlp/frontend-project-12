@@ -11,9 +11,7 @@
   "author": "tdd3vlp",
   "license": "ISC",
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.4",
-    "axios": "^1.7.7",
-    "react-router-dom": "^6.27.0"
+    "@hexlet/chat-server": "^2.0.4"
   },
   "devDependencies": {
     "sass-embedded": "^1.79.5"

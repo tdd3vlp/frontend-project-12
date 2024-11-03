@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { removeChannel } from '../features/channels/channelsSlice';
 import { closeRemoveChannelModal } from '../features/modals/modalSlice';
+import { toast } from 'react-toastify';
 
 export default function RemoveChannelModal() {
   const { t } = useTranslation();
@@ -13,6 +14,7 @@ export default function RemoveChannelModal() {
     if (channelId) {
       dispatch(removeChannel(channelId));
       dispatch(closeRemoveChannelModal());
+      toast.success(t('channels.removed'));
     }
   };
 

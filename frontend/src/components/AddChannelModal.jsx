@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import { addChannel } from '../features/channels/channelsSlice';
 import { closeAddChannelModal } from '../features/modals/modalSlice';
 import Filter from 'leo-profanity';
+import { toast } from 'react-toastify';
 
 export default function AddChannelModal() {
   const inputRef = useRef(null);
@@ -30,10 +31,11 @@ export default function AddChannelModal() {
     validationSchema: schema,
     validateOnChange: false,
     onSubmit: (values) => {
-      const filteredName = Filter.clean(values.name, '*', 2);
+      const filteredName = Filter.clean(values.name);
       values.name = filteredName;
       dispatch(addChannel({ name: values.name }));
       handleCloseModal();
+      toast.success(t('channels.created'));
       formik.resetForm();
     },
   });
@@ -57,7 +59,8 @@ export default function AddChannelModal() {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
-          <Form.Group>
+          <Form.Group controlId="name">
+            <Form.Label visuallyHidden>{t('modals.channelName')}</Form.Label>
             <Form.Control
               ref={inputRef}
               type="text"

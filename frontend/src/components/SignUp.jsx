@@ -1,6 +1,16 @@
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { Container, Button, ButtonGroup, Image, Card, Row, Col, Form } from 'react-bootstrap';
+import {
+  Container,
+  Button,
+  ButtonGroup,
+  Image,
+  Card,
+  Row,
+  Col,
+  Form,
+  FloatingLabel,
+} from 'react-bootstrap';
 import signupImage from '../assets/sign-up.png';
 import * as yup from 'yup';
 import axios from 'axios';
@@ -77,57 +87,57 @@ export default function SignUp() {
                   <Card.Title as="h1" className="text-center mb-4">
                     {t('login.signup')}
                   </Card.Title>
-                  <Form.Floating className="mb-3">
-                    <Form.Control
-                      name="username"
-                      autoComplete="username"
-                      required
-                      placeholder={t('signup.usernameConstraints')}
-                      id="username"
-                      onChange={formik.handleChange}
-                      value={formik.values.username}
-                      isInvalid={!!formik.errors.username}
-                      autoFocus
-                    />
-                    <Form.Label>{t('signup.username')}</Form.Label>
-                    <Form.Control.Feedback type="invalid" tooltip>
-                      {formik.errors.username || t('signup.usernameConstraints')}
-                    </Form.Control.Feedback>
-                  </Form.Floating>
-                  <Form.Floating className="mb-3">
-                    <Form.Control
-                      type="password"
-                      name="password"
-                      autoComplete="current-password"
-                      required
-                      placeholder={t('signup.passMin')}
-                      id="password"
-                      onChange={formik.handleChange}
-                      value={formik.values.password}
-                      isInvalid={!!formik.errors.password}
-                    />
-                    <Form.Label>{t('signup.password')}</Form.Label>
-                    <Form.Control.Feedback type="invalid" tooltip>
-                      {formik.errors.password || t('signup.passMin')}
-                    </Form.Control.Feedback>
-                  </Form.Floating>
-                  <Form.Floating className="mb-4">
-                    <Form.Control
-                      type="password"
-                      name="confirmPassword"
-                      autoComplete="new-password"
-                      required
-                      placeholder={t('signup.mustMatch')}
-                      id="confirmPassword"
-                      onChange={formik.handleChange}
-                      value={formik.values.confirmPassword}
-                      isInvalid={!!formik.errors.confirmPassword}
-                    />
-                    <Form.Label>{t('signup.confirm')}</Form.Label>
-                    <Form.Control.Feedback type="invalid" tooltip>
-                      {formik.errors.confirmPassword || t('signup.usernameConstraints')}
-                    </Form.Control.Feedback>
-                  </Form.Floating>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel controlId="username" label={t('signup.username')}>
+                      <Form.Control
+                        name="username"
+                        autoComplete="username"
+                        required
+                        placeholder={t('signup.username')}
+                        onChange={formik.handleChange}
+                        value={formik.values.username}
+                        isInvalid={!!formik.errors.username}
+                        autoFocus
+                      />
+                      <Form.Control.Feedback type="invalid" tooltip>
+                        {formik.errors.username || t('signup.usernameConstraints')}
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel controlId="password" label={t('signup.password')}>
+                      <Form.Control
+                        type="password"
+                        name="password"
+                        autoComplete="current-password"
+                        required
+                        placeholder={t('signup.password')}
+                        onChange={formik.handleChange}
+                        value={formik.values.password}
+                        isInvalid={!!formik.errors.password}
+                      />
+                      <Form.Control.Feedback type="invalid" tooltip>
+                        {formik.errors.password || t('signup.passMin')}
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group className="mb-4">
+                    <FloatingLabel controlId="confirmPassword" label={t('signup.confirm')}>
+                      <Form.Control
+                        type="password"
+                        name="confirmPassword"
+                        autoComplete="new-password"
+                        required
+                        placeholder={t('signup.confirm')}
+                        onChange={formik.handleChange}
+                        value={formik.values.confirmPassword}
+                        isInvalid={!!formik.errors.confirmPassword}
+                      />
+                      <Form.Control.Feedback type="invalid" tooltip>
+                        {formik.errors.confirmPassword || t('signup.alreadyExists')}
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
                   <ButtonGroup className="w-100">
                     <Button variant="outline-primary" type="submit" className="w-100">
                       {t('signup.submit')}

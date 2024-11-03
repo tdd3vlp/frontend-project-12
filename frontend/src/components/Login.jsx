@@ -7,7 +7,17 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { serverPaths as paths } from '../routes';
 import { login } from '../features/auth/authSlice';
-import { Container, Button, ButtonGroup, Image, Card, Row, Col, Form } from 'react-bootstrap';
+import {
+  Container,
+  Button,
+  ButtonGroup,
+  Image,
+  Card,
+  Row,
+  Col,
+  Form,
+  FloatingLabel,
+} from 'react-bootstrap';
 
 export default function Login() {
   const { t } = useTranslation();
@@ -63,37 +73,36 @@ export default function Login() {
                     <Card.Title as="h1" className="text-center mb-4">
                       {t('login.submit')}
                     </Card.Title>
-                    <Form.Floating className="mb-3">
-                      <Form.Control
-                        name="username"
-                        autoComplete="username"
-                        required
-                        placeholder={t('login.username')}
-                        id="username"
-                        onChange={formik.handleChange}
-                        value={formik.values.username}
-                        isInvalid={!!formik.errors.name}
-                      />
-                      <Form.Label>{t('login.username')}</Form.Label>
-                    </Form.Floating>
-                    <Form.Floating className="mb-4">
-                      <Form.Control
-                        type="password"
-                        name="password"
-                        autoComplete="current-password"
-                        required
-                        placeholder={t('login.password')}
-                        id="password"
-                        onChange={formik.handleChange}
-                        value={formik.values.password}
-                        isInvalid={!!formik.errors.password}
-                      />
-                      <Form.Label>{t('login.password')}</Form.Label>
-                      <Form.Control.Feedback type="invalid" tooltip>
-                        {t('login.authFailed')}
-                      </Form.Control.Feedback>
-                    </Form.Floating>
-
+                    <Form.Group className="mb-3">
+                      <FloatingLabel controlId="username" label={t('login.username')}>
+                        <Form.Control
+                          name="username"
+                          autoComplete="username"
+                          required
+                          placeholder={t('login.username')}
+                          onChange={formik.handleChange}
+                          value={formik.values.username}
+                          isInvalid={!!formik.errors.name}
+                        />
+                      </FloatingLabel>
+                    </Form.Group>
+                    <Form.Group className="mb-4">
+                      <FloatingLabel controlId="password" label={t('login.password')}>
+                        <Form.Control
+                          type="password"
+                          name="password"
+                          autoComplete="current-password"
+                          required
+                          placeholder={t('login.password')}
+                          onChange={formik.handleChange}
+                          value={formik.values.password}
+                          isInvalid={!!formik.errors.password}
+                        />
+                        <Form.Control.Feedback type="invalid" tooltip>
+                          {t('login.authFailed')}
+                        </Form.Control.Feedback>
+                      </FloatingLabel>
+                    </Form.Group>
                     <ButtonGroup className="w-100 mb-3">
                       <Button
                         variant="outline-primary"

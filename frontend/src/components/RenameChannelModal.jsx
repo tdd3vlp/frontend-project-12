@@ -7,6 +7,7 @@ import { closeRenameChannelModal } from '../features/modals/modalSlice';
 import { renameChannel } from '../features/channels/channelsSlice';
 import { useEffect, useRef } from 'react';
 import Filter from 'leo-profanity';
+import { toast } from 'react-toastify';
 
 export default function RenameChannelModal() {
   const inputRef = useRef(null);
@@ -42,10 +43,11 @@ export default function RenameChannelModal() {
     validationSchema: schema,
     validateOnChange: false,
     onSubmit: (values) => {
-      const filteredName = Filter.clean(values.name, '*', 2);
+      const filteredName = Filter.clean(values.name);
       values.name = filteredName;
       dispatch(renameChannel({ id: channelId, name: values }));
       dispatch(closeRenameChannelModal());
+      toast.success(t('channels.renamed'));
       formik.resetForm();
     },
   });
@@ -57,7 +59,8 @@ export default function RenameChannelModal() {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
-          <Form.Group>
+          <Form.Group controlId="name">
+            <Form.Label visuallyHidden>{t('modals.channelName')}</Form.Label>
             <Form.Control
               ref={inputRef}
               type="text"

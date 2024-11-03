@@ -21,6 +21,7 @@ import RenameChannelModal from './RenameChannelModal';
 import { PlusSquare } from 'react-bootstrap-icons';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import Filter from 'leo-profanity';
+import { ToastContainer } from 'react-toastify';
 
 export default function Home() {
   const inputRef = useRef(null);
@@ -81,10 +82,11 @@ export default function Home() {
               <b>{t('channels.channels')}</b>
               <Button
                 variant="link"
-                className="text-primary p-0"
+                className="text-primary p-0 btn-group-vertical"
                 onClick={() => dispatch(openAddChannelModal())}
               >
-                <PlusSquare />
+                <PlusSquare size={20} />
+                <span className="visually-hidden">+</span>
               </Button>
             </div>
             <ChannelsList />
@@ -106,7 +108,7 @@ export default function Home() {
                     <Form.Control
                       ref={inputRef}
                       name="body"
-                      aria-label={t('newMessage')}
+                      aria-label={t('chat.newMessage')}
                       className="border-0 p-0 ps-2"
                       placeholder={t('chat.enterMessage')}
                       onChange={formik.handleChange}
@@ -131,6 +133,7 @@ export default function Home() {
       <AddChannelModal />
       <RemoveChannelModal />
       <RenameChannelModal />
+      <ToastContainer position="top-right" autoClose={7000} />
     </div>
   );
 }
