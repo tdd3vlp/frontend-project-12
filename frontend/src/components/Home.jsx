@@ -1,12 +1,9 @@
-import { Container, Navbar, Button, Row, Col, Form, InputGroup } from 'react-bootstrap';
+import { Container, Button, Row, Col, Form, InputGroup } from 'react-bootstrap';
 import { useFormik } from 'formik';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useEffect, useRef } from 'react';
-import { logout } from '../features/auth/authSlice';
 import ChannelsList from './ChannelsList';
 import { fetchChannels } from '../features/channels/channelsSlice';
 import { getActiveChannel } from '../features/channels/channelsSlice';
@@ -26,7 +23,6 @@ import { ToastContainer } from 'react-toastify';
 export default function Home() {
   const inputRef = useRef(null);
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const activeChannel = useSelector(getActiveChannel);
   const user = useSelector((state) => state.auth.user);
@@ -58,23 +54,8 @@ export default function Home() {
     }, 200);
   }, [activeChannelId]);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
-
   return (
-    <div className="d-flex flex-column h-100" id="chat">
-      <Navbar variant="light" expand="lg" className="shadow-sm bg-white">
-        <Container>
-          <Navbar.Brand as={Link} to="/">
-            {t('hexletChat')}
-          </Navbar.Brand>
-          <Button as={Link} variant="primary" onClick={handleLogout}>
-            {t('logout')}
-          </Button>
-        </Container>
-      </Navbar>
+    <>
       <Container className="h-100 my-4 overflow-hidden rounded shadow">
         <Row className="h-100 bg-white flex-md-row">
           <Col xs={4} md={2} className="border-end bg-light d-flex flex-column h-100 p-0">
@@ -134,6 +115,6 @@ export default function Home() {
       <RemoveChannelModal />
       <RenameChannelModal />
       <ToastContainer position="top-right" autoClose={7000} />
-    </div>
+    </>
   );
 }
