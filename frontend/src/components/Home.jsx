@@ -79,7 +79,8 @@ const Home = () => {
                   </b>
                 </p>
                 <span className="text-muted">
-                  {messagesLength}&nbsp;
+                  {messagesLength}
+                  &nbsp;
                   {t('chat.messageCount', { count: messagesLength })}
                 </span>
               </div>
