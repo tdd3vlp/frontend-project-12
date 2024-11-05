@@ -11,10 +11,7 @@ import { handleRemoveChannel } from './features/channels/channelsSlice.jsx';
 import { handleRenameChannel } from './features/channels/channelsSlice.jsx';
 
 const init = async () => {
-  const socket = io('http://localhost:5001', {
-    withCredentials: true,
-    transports: ['websocket'],
-  });
+  const socket = io();
 
   socket.on('newMessage', (payload) => {
     return new Promise((resolve, reject) => {

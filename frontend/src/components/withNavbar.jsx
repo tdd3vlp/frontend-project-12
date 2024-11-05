@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../features/auth/authSlice';
 
-export default function withNavbar(WrappedComponent, hasLogoutButton = false) {
+export default function withNavbar(WrappedComponent, hasLogoutButton) {
   const ComponentWithNav = (props) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -16,7 +16,7 @@ export default function withNavbar(WrappedComponent, hasLogoutButton = false) {
       navigate('/login');
     };
 
-    return hasLogoutButton ? (
+    return !hasLogoutButton ? (
       <div className="d-flex flex-column h-100" id="chat">
         <Navbar variant="light" expand="lg" className="shadow-sm bg-white">
           <Container>

@@ -17,15 +17,15 @@ export const serverPaths = {
 export const routerPaths = [
   {
     path: '/',
-    element: <PrivateRoute>{withNavbar(Home, false)}</PrivateRoute>,
-    errorElement: withNavbar(NotFoundPage, false),
+    element: <PrivateRoute>{withNavbar(Home, true)}</PrivateRoute>,
+    errorElement: withNavbar(NotFoundPage, true),
   },
   {
     path: '/login',
-    element: withNavbar(Login, true),
+    element: withNavbar(Login),
   },
   {
     path: '/signup',
-    element: withNavbar(SignUp, true),
+    element: withNavbar(SignUp),
   },
 ];
