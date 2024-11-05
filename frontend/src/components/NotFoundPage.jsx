@@ -2,7 +2,7 @@ import { Button, ButtonGroup, Col, Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-export default function NotFoundPage() {
+const NotFoundPage = () => {
   const { t } = useTranslation();
   return (
     <Col className="m-5 p-3 bg-white shadow-sm rounded">
@@ -21,4 +21,6 @@ export default function NotFoundPage() {
       </ButtonGroup>
     </Col>
   );
-}
+};
+
+export default NotFoundPage;

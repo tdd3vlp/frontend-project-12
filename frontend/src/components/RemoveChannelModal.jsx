@@ -5,7 +5,7 @@ import { removeChannel } from '../features/channels/channelsSlice';
 import { closeRemoveChannelModal } from '../features/modals/modalSlice';
 import { toast } from 'react-toastify';
 
-export default function RemoveChannelModal() {
+const RemoveChannelModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { isOpen, channelId } = useSelector((state) => state.modals.removeChannelModal);
@@ -36,4 +36,6 @@ export default function RemoveChannelModal() {
       </Modal.Body>
     </Modal>
   );
-}
+};
+
+export default RemoveChannelModal;

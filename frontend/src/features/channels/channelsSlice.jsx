@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { serverPaths as paths } from '../../routes';
+import paths from '../../serverRoutes';
 import fetchStatus from '../../utils/fetchStatus';
 import axios from 'axios';
 
@@ -56,6 +56,8 @@ const renameChannel = createAsyncThunk('channels/renameChannel', async ({ id, na
     console.error('renameChannelError', renameChannelError);
   }
 });
+
+/* eslint-disable-next-line no-param-reassign */
 
 const channelsSlice = createSlice({
   name: 'channels',

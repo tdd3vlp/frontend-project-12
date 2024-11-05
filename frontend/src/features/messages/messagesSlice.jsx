@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { serverPaths as paths } from '../../routes';
+import paths from '../../serverRoutes';
 import fetchStatus from '../../utils/fetchStatus';
 import { removeChannel } from '../channels/channelsSlice';
 import axios from 'axios';
@@ -28,6 +28,7 @@ const addMessage = createAsyncThunk('messages/addMessage', async (newMessage) =>
   return response.data;
 });
 
+/* eslint-disable-next-line no-param-reassign */
 const messagesSlice = createSlice({
   name: 'messages',
   initialState: {

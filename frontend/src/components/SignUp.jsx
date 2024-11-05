@@ -14,12 +14,12 @@ import {
 import signupImage from '../assets/sign-up.png';
 import * as yup from 'yup';
 import axios from 'axios';
-import { serverPaths as paths } from '../routes';
+import paths from '../serverRoutes';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../features/auth/authSlice';
 import { useDispatch } from 'react-redux';
 
-export default function SignUp() {
+const SignUp = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -151,4 +151,6 @@ export default function SignUp() {
       </Container>
     </div>
   );
-}
+};
+
+export default SignUp;

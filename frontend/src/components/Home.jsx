@@ -20,7 +20,7 @@ import { ArrowRightSquare } from 'react-bootstrap-icons';
 import Filter from 'leo-profanity';
 import { ToastContainer } from 'react-toastify';
 
-export default function Home() {
+const Home = () => {
   const inputRef = useRef(null);
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -117,4 +117,6 @@ export default function Home() {
       <ToastContainer position="top-right" autoClose={7000} />
     </>
   );
-}
+};
+
+export default Home;

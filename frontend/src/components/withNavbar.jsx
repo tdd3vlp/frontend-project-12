@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../features/auth/authSlice';
 
-export default function withNavbar(WrappedComponent, hasLogoutButton) {
+const withNavbar = (WrappedComponent, hasLogoutButton) => {
   const ComponentWithNav = (props) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -44,4 +44,6 @@ export default function withNavbar(WrappedComponent, hasLogoutButton) {
     );
   };
   return <ComponentWithNav />;
-}
+};
+
+export default withNavbar;

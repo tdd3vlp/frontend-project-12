@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import loginImage from '../assets/sign-in.png';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { serverPaths as paths } from '../routes';
+import paths from '../serverRoutes';
 import { login } from '../features/auth/authSlice';
 import {
   Container,
@@ -19,7 +19,7 @@ import {
   FloatingLabel,
 } from 'react-bootstrap';
 
-export default function Login() {
+const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -128,4 +128,6 @@ export default function Login() {
       </Container>
     </>
   );
-}
+};
+
+export default Login;

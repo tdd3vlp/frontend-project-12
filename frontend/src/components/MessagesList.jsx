@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useRef, useEffect } from 'react';
 
 // eslint-disable-next-line react/prop-types
-export default function MessagesList({ channelId }) {
+const MessagesList = ({ channelId }) => {
   const messagesEndRef = useRef(null);
   const messages = useSelector((state) => state.messages.byId);
 
@@ -28,4 +28,6 @@ export default function MessagesList({ channelId }) {
       })}
     </div>
   );
-}
+};
+
+export default MessagesList;

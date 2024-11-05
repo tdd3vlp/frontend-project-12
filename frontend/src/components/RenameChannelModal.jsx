@@ -9,7 +9,7 @@ import { useEffect, useRef } from 'react';
 import Filter from 'leo-profanity';
 import { toast } from 'react-toastify';
 
-export default function RenameChannelModal() {
+const RenameChannelModal = () => {
   const inputRef = useRef(null);
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -83,4 +83,6 @@ export default function RenameChannelModal() {
       </Modal.Body>
     </Modal>
   );
-}
+};
+
+export default RenameChannelModal;
