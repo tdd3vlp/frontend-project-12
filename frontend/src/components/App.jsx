@@ -1,9 +1,9 @@
 import '../App.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { routerPaths as routes } from '../routes';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { Provider, ErrorBoundary } from '@rollbar/react';
+import { routerPaths as routes } from '../routes';
 
 const rollbarConfig = {
   accessToken: 'b9c73109ae364bff9ab512394cfd3bbf',
@@ -12,14 +12,14 @@ const rollbarConfig = {
 
 const router = createBrowserRouter(routes);
 
-export default function App() {
+const App = () => {
   return (
-    <>
-      <Provider config={rollbarConfig}>
-        <ErrorBoundary>
-          <RouterProvider router={router} />
-        </ErrorBoundary>
-      </Provider>
-    </>
+    <Provider config={rollbarConfig}>
+      <ErrorBoundary>
+        <RouterProvider router={router} />
+      </ErrorBoundary>
+    </Provider>
   );
-}
+};
+
+export default App;

@@ -4,18 +4,23 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { addChannel } from '../features/channels/channelsSlice';
-import { closeAddChannelModal } from '../features/modals/modalSlice';
 import Filter from 'leo-profanity';
 import { toast } from 'react-toastify';
+import { addChannel } from '../features/channels/channelsSlice';
+import { closeAddChannelModal } from '../features/modals/modalSlice';
 
-export default function AddChannelModal() {
+const AddChannelModal = () => {
   const inputRef = useRef(null);
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.modals.addChannelModal.isOpen);
   const channels = useSelector((state) => state.channels.byId);
   const channelsNames = Object.values(channels).map((channel) => channel.name);
+
+  const handleCloseModal = () => {
+    dispatch(closeAddChannelModal());
+    formik.resetForm();
+  };
 
   const schema = yup.object({
     name: yup
@@ -31,9 +36,7 @@ export default function AddChannelModal() {
     validationSchema: schema,
     validateOnChange: false,
     onSubmit: (values) => {
-      const filteredName = Filter.clean(values.name);
-      values.name = filteredName;
-      dispatch(addChannel({ name: values.name }));
+      dispatch(addChannel({ name: Filter.clean(values.name) }));
       handleCloseModal();
       toast.success(t('channels.created'));
       formik.resetForm();
@@ -46,11 +49,6 @@ export default function AddChannelModal() {
       inputRef.current.focus();
     }
   }, [isOpen]);
-
-  const handleCloseModal = () => {
-    dispatch(closeAddChannelModal());
-    formik.resetForm();
-  };
 
   return (
     <Modal show={isOpen} centered onHide={handleCloseModal}>
@@ -83,4 +81,6 @@ export default function AddChannelModal() {
       </Modal.Body>
     </Modal>
   );
-}
+};
+
+export default AddChannelModal;

@@ -1,12 +1,10 @@
 import { Nav, Button, ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { setActiveChannel } from '../features/channels/channelsSlice';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { openRemoveChannelModal } from '../features/modals/modalSlice';
-import { openRenameChannelModal } from '../features/modals/modalSlice';
+import { openRemoveChannelModal, openRenameChannelModal } from '../features/modals/modalSlice';
 
-export default function ChannelsList() {
+const ChannelsList = () => {
   const dispatch = useDispatch();
   const { byId: channels, activeChannelId } = useSelector((state) => state.channels);
   const { t } = useTranslation();
@@ -72,4 +70,6 @@ export default function ChannelsList() {
       ))}
     </Nav>
   );
-}
+};
+
+export default ChannelsList;
