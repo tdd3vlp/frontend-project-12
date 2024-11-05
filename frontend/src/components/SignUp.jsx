@@ -11,13 +11,13 @@ import {
   Form,
   FloatingLabel,
 } from 'react-bootstrap';
-import signupImage from '../assets/sign-up.png';
 import * as yup from 'yup';
 import axios from 'axios';
-import paths from '../serverRoutes';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../features/auth/authSlice';
 import { useDispatch } from 'react-redux';
+import paths from '../serverRoutes';
+import { login } from '../features/auth/authSlice';
+import signupImage from '../assets/sign-up.png';
 
 const SignUp = () => {
   const { t } = useTranslation();

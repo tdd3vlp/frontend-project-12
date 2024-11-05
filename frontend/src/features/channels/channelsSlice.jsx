@@ -1,7 +1,9 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import paths from '../../serverRoutes';
 import fetchStatus from '../../utils/fetchStatus';
-import axios from 'axios';
 
 const fetchChannels = createAsyncThunk('channels/fetchChannels', async () => {
   const token = localStorage.getItem('token');
@@ -142,8 +144,11 @@ export const getActiveChannel = (state) => {
   return byId[activeChannelId]?.name;
 };
 
-export const { setActiveChannel, handleAddChannel, handleRemoveChannel, handleRenameChannel } =
-  channelsSlice.actions;
+export const {
+  setActiveChannel, handleAddChannel, handleRemoveChannel, handleRenameChannel,
+} = channelsSlice.actions;
 
-export { fetchChannels, addChannel, removeChannel, renameChannel };
+export {
+  fetchChannels, addChannel, removeChannel, renameChannel,
+};
 export default channelsSlice.reducer;

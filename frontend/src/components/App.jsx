@@ -12,14 +12,12 @@ const rollbarConfig = {
 
 const router = createBrowserRouter(routes);
 
-const App = () => {
-  return (
-    <Provider config={rollbarConfig}>
-      <ErrorBoundary>
-        <RouterProvider router={router} />
-      </ErrorBoundary>
-    </Provider>
-  );
-};
+const App = () => (
+  <Provider config={rollbarConfig}>
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
+  </Provider>
+);
 
 export default App;

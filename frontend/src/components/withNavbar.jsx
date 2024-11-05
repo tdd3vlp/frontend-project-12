@@ -1,12 +1,11 @@
+import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Container, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { logout } from '../features/auth/authSlice';
 
 const withNavbar = (WrappedComponent, hasLogoutButton) => {
-  const ComponentWithNav = (props) => {
+  const ComponentWithNav = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,7 +24,7 @@ const withNavbar = (WrappedComponent, hasLogoutButton) => {
             </Navbar.Brand>
           </Container>
         </Navbar>
-        <WrappedComponent {...props} />
+        <WrappedComponent />
       </div>
     ) : (
       <div className="d-flex flex-column h-100" id="chat">
@@ -39,7 +38,7 @@ const withNavbar = (WrappedComponent, hasLogoutButton) => {
             </Button>
           </Container>
         </Navbar>
-        <WrappedComponent {...props} />
+        <WrappedComponent />
       </div>
     );
   };

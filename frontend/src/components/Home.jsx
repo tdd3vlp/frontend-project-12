@@ -1,24 +1,22 @@
-import { Container, Button, Row, Col, Form, InputGroup } from 'react-bootstrap';
+/* eslint-disable no-param-reassign */
+import {
+  Container, Button, Row, Col, Form, InputGroup,
+} from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useRef } from 'react';
-import ChannelsList from './ChannelsList';
-import { fetchChannels } from '../features/channels/channelsSlice';
-import { getActiveChannel } from '../features/channels/channelsSlice';
+import Filter from 'leo-profanity';
+import { ToastContainer } from 'react-toastify';
+import { PlusSquare, ArrowRightSquare } from 'react-bootstrap-icons';
 import MessagesList from './MessagesList';
-import { addMessage } from '../features/messages/messagesSlice';
-import { fetchMessages } from '../features/messages/messagesSlice';
-import { getMessagesLength } from '../features/messages/messagesSlice';
-import { openAddChannelModal } from '../features/modals/modalSlice';
 import AddChannelModal from './AddChannelModal';
 import RemoveChannelModal from './RemoveChannelModal';
 import RenameChannelModal from './RenameChannelModal';
-import { PlusSquare } from 'react-bootstrap-icons';
-import { ArrowRightSquare } from 'react-bootstrap-icons';
-import Filter from 'leo-profanity';
-import { ToastContainer } from 'react-toastify';
+import { openAddChannelModal } from '../features/modals/modalSlice';
+import { fetchChannels, getActiveChannel } from '../features/channels/channelsSlice';
+import { addMessage, fetchMessages, getMessagesLength } from '../features/messages/messagesSlice';
+import ChannelsList from './ChannelsList';
 
 const Home = () => {
   const inputRef = useRef(null);
@@ -41,13 +39,11 @@ const Home = () => {
     },
   });
 
-  // Load channels and messages
   useEffect(() => {
     dispatch(fetchChannels());
     dispatch(fetchMessages());
   }, [dispatch]);
 
-  // Focus on input
   useEffect(() => {
     setTimeout(() => {
       inputRef.current.focus();
@@ -76,10 +72,15 @@ const Home = () => {
             <div className="d-flex flex-column h-100">
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 <p className="m-0">
-                  <b># {activeChannel}</b>
+                  <b>
+                    #
+                    &nbsp;
+                    {activeChannel}
+                  </b>
                 </p>
                 <span className="text-muted">
-                  {messagesLength} {t('chat.messageCount', { count: messagesLength })}
+                  {messagesLength}&nbsp;
+                  {t('chat.messageCount', { count: messagesLength })}
                 </span>
               </div>
               <MessagesList channelId={activeChannelId} />

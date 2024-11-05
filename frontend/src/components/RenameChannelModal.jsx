@@ -1,13 +1,14 @@
+/* eslint-disable no-param-reassign */
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { closeRenameChannelModal } from '../features/modals/modalSlice';
-import { renameChannel } from '../features/channels/channelsSlice';
+import { toast } from 'react-toastify';
 import { useEffect, useRef } from 'react';
 import Filter from 'leo-profanity';
-import { toast } from 'react-toastify';
+import { closeRenameChannelModal } from '../features/modals/modalSlice';
+import { renameChannel } from '../features/channels/channelsSlice';
 
 const RenameChannelModal = () => {
   const inputRef = useRef(null);
@@ -27,7 +28,6 @@ const RenameChannelModal = () => {
       .max(20, t('modals.max')),
   });
 
-  // Focus on input
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => {

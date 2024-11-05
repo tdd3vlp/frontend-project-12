@@ -17,11 +17,6 @@ const AddChannelModal = () => {
   const channels = useSelector((state) => state.channels.byId);
   const channelsNames = Object.values(channels).map((channel) => channel.name);
 
-  const handleCloseModal = () => {
-    dispatch(closeAddChannelModal());
-    formik.resetForm();
-  };
-
   const schema = yup.object({
     name: yup
       .string()
@@ -37,13 +32,17 @@ const AddChannelModal = () => {
     validateOnChange: false,
     onSubmit: (values) => {
       dispatch(addChannel({ name: Filter.clean(values.name) }));
-      handleCloseModal();
-      toast.success(t('channels.created'));
+      dispatch(closeAddChannelModal());
       formik.resetForm();
+      toast.success(t('channels.created'));
     },
   });
 
-  // Focus on input
+  const handleCloseModal = () => {
+    dispatch(closeAddChannelModal());
+    formik.resetForm();
+  };
+
   useEffect(() => {
     if (isOpen) {
       inputRef.current.focus();

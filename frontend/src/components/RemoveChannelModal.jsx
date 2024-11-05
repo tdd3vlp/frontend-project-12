@@ -1,9 +1,9 @@
 import { Modal, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { removeChannel } from '../features/channels/channelsSlice';
-import { closeRemoveChannelModal } from '../features/modals/modalSlice';
 import { toast } from 'react-toastify';
+import { closeRemoveChannelModal } from '../features/modals/modalSlice';
+import { removeChannel } from '../features/channels/channelsSlice';
 
 const RemoveChannelModal = () => {
   const { t } = useTranslation();

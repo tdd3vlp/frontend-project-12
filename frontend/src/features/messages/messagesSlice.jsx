@@ -1,8 +1,10 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import paths from '../../serverRoutes';
 import fetchStatus from '../../utils/fetchStatus';
 import { removeChannel } from '../channels/channelsSlice';
-import axios from 'axios';
 
 const fetchMessages = createAsyncThunk('messages/fetchMessages', async () => {
   const token = localStorage.getItem('token');
@@ -28,7 +30,6 @@ const addMessage = createAsyncThunk('messages/addMessage', async (newMessage) =>
   return response.data;
 });
 
-/* eslint-disable-next-line no-param-reassign */
 const messagesSlice = createSlice({
   name: 'messages',
   initialState: {
@@ -72,6 +73,7 @@ const messagesSlice = createSlice({
       .addCase(removeChannel.fulfilled, (state, action) => {
         const { id } = action.payload;
         const messages = state.byId;
+        // eslint-disable-next-line array-callback-return
         Object.values(messages).filter((message) => {
           if (message.channelId === id) {
             delete state.byId[message.id];
@@ -84,10 +86,8 @@ const messagesSlice = createSlice({
 
 export const getMessagesLength = (state) => {
   const messages = state.messages.byId;
-  const activeChannelId = state.channels.activeChannelId;
-  return Object.values(messages).filter((message) => {
-    return message.channelId === activeChannelId;
-  }).length;
+  const { activeChannelId } = state.channels;
+  return Object.values(messages).filter((message) => message.channelId === activeChannelId).length;
 };
 
 export const { handleAddMessage } = messagesSlice.actions;

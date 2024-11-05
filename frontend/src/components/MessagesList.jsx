@@ -19,12 +19,14 @@ const MessagesList = ({ channelId }) => {
         if (message.channelId === channelId) {
           return (
             <div className="text-break mb-2" key={message.id}>
-              <b>{message.username}</b>: {message.body}
+              <b>{message.username}</b>
+              :&nbsp;
+              {message.body}
               <br />
             </div>
           );
         }
-        message.id === channelId;
+        return message.id === channelId;
       })}
     </div>
   );

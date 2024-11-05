@@ -1,7 +1,9 @@
-import { Nav, Button, ButtonGroup, Dropdown } from 'react-bootstrap';
+import {
+  Nav, Button, ButtonGroup, Dropdown,
+} from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { setActiveChannel } from '../features/channels/channelsSlice';
 import { useTranslation } from 'react-i18next';
+import { setActiveChannel } from '../features/channels/channelsSlice';
 import { openRemoveChannelModal, openRenameChannelModal } from '../features/modals/modalSlice';
 
 const ChannelsList = () => {
