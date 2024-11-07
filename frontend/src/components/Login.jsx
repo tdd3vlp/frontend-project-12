@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -33,21 +33,25 @@ const Login = () => {
       username: '',
       password: '',
     },
-    onSubmit: async ({ username, password }) => {
+    onSubmit: async ({ username, password }, { resetForm, setErrors }) => {
       try {
         const response = await axios.post(paths.loginPath(), { username, password });
         handleLogin({ username, token: response.data.token });
-        formik.resetForm();
+        resetForm();
       } catch (loginError) {
-        if (loginError.message === 'Network Error') {
-          console.log(t('errors.network'));
-        }
-
-        if (loginError.response.data.statusCode === 401) {
-          formik.setErrors({
-            name: ' ',
-            password: ' ',
-          });
+        if (loginError instanceof AxiosError) {
+          if (!loginError.response) {
+            console.log(t('errors.network'));
+            return;
+          }
+          if (loginError.response.status === 401) {
+            setErrors({
+              username: ' ',
+              password: ' ',
+            });
+          } else {
+            console.log(t('errors.unknownError'));
+          }
         }
       }
     },
@@ -80,7 +84,7 @@ const Login = () => {
                         placeholder={t('login.username')}
                         onChange={formik.handleChange}
                         value={formik.values.username}
-                        isInvalid={!!formik.errors.name}
+                        isInvalid={!!formik.errors.username}
                       />
                     </FloatingLabel>
                   </Form.Group>

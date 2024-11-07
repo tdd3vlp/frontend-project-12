@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import {
   Container, Button, Row, Col, Form, InputGroup,
 } from 'react-bootstrap';
@@ -31,11 +30,15 @@ const Home = () => {
     initialValues: {
       body: '',
     },
-    onSubmit: (values) => {
-      const filteredBody = Filter.clean(values.body);
-      values.body = filteredBody;
-      dispatch(addMessage({ ...values, channelId: activeChannelId, username: user }));
-      formik.resetForm();
+    onSubmit: (values, { resetForm }) => {
+      dispatch(addMessage(
+        {
+          body: Filter.clean(values.body),
+          channelId: activeChannelId,
+          username: user,
+        },
+      ));
+      resetForm();
     },
   });
 

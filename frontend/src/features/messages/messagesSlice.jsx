@@ -74,7 +74,7 @@ const messagesSlice = createSlice({
         const { id } = action.payload;
         const messages = state.byId;
         // eslint-disable-next-line array-callback-return
-        Object.values(messages).filter((message) => {
+        Object.values(messages).map((message) => {
           if (message.channelId === id) {
             delete state.byId[message.id];
             state.allIds = state.allIds.filter((messageId) => messageId !== message.id);

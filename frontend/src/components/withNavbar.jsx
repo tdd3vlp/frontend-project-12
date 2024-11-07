@@ -15,27 +15,18 @@ const withNavbar = (WrappedComponent, hasLogoutButton) => {
       navigate('/login');
     };
 
-    return !hasLogoutButton ? (
+    return (
       <div className="d-flex flex-column h-100" id="chat">
         <Navbar variant="light" expand="lg" className="shadow-sm bg-white">
           <Container>
             <Navbar.Brand as={Link} to="/">
               {t('hexletChat')}
             </Navbar.Brand>
-          </Container>
-        </Navbar>
-        <WrappedComponent />
-      </div>
-    ) : (
-      <div className="d-flex flex-column h-100" id="chat">
-        <Navbar variant="light" expand="lg" className="shadow-sm bg-white">
-          <Container>
-            <Navbar.Brand as={Link} to="/">
-              {t('hexletChat')}
-            </Navbar.Brand>
-            <Button as={Link} variant="primary" onClick={handleLogout}>
-              {t('logout')}
-            </Button>
+            {hasLogoutButton && (
+              <Button variant="primary" onClick={handleLogout}>
+                {t('logout')}
+              </Button>
+            )}
           </Container>
         </Navbar>
         <WrappedComponent />
