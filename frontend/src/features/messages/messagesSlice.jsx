@@ -21,13 +21,17 @@ const fetchMessages = createAsyncThunk('messages/fetchMessages', async () => {
 });
 
 const addMessage = createAsyncThunk('messages/addMessage', async (newMessage) => {
-  const token = localStorage.getItem('token');
-  const response = await axios.post(paths.messagesPath(), newMessage, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.post(paths.messagesPath(), newMessage, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (addMessageError) {
+    console.error('addMessageError', addMessageError);
+  }
 });
 
 const messagesSlice = createSlice({
@@ -74,7 +78,7 @@ const messagesSlice = createSlice({
         const { id } = action.payload;
         const messages = state.byId;
         // eslint-disable-next-line array-callback-return
-        Object.values(messages).filter((message) => {
+        Object.values(messages).map((message) => {
           if (message.channelId === id) {
             delete state.byId[message.id];
             state.allIds = state.allIds.filter((messageId) => messageId !== message.id);

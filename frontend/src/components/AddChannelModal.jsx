@@ -30,11 +30,16 @@ const AddChannelModal = () => {
     initialValues: { name: '' },
     validationSchema: schema,
     validateOnChange: false,
-    onSubmit: (values) => {
-      dispatch(addChannel({ name: Filter.clean(values.name) }));
+    onSubmit: (values, { resetForm }) => {
+      dispatch(addChannel({ name: Filter.clean(values.name) }))
+        .then(() => {
+          toast.success(t('channels.created'));
+          resetForm();
+        })
+        .catch(() => {
+          toast.error(t('errors.network'));
+        });
       dispatch(closeAddChannelModal());
-      formik.resetForm();
-      toast.success(t('channels.created'));
     },
   });
 

@@ -6,7 +6,7 @@ import { Provider, ErrorBoundary } from '@rollbar/react';
 import routes from '../routerRoutes';
 
 const rollbarConfig = {
-  accessToken: 'b9c73109ae364bff9ab512394cfd3bbf',
+  accessToken: import.meta.env.VITE_ROLLBAR_ACCESS_TOKEN,
   environment: 'testenv',
 };
 

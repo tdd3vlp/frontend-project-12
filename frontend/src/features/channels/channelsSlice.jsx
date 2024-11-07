@@ -21,17 +21,20 @@ const fetchChannels = createAsyncThunk('channels/fetchChannels', async () => {
 
 const addChannel = createAsyncThunk('channels/addChannel', async (newChannel) => {
   const token = localStorage.getItem('token');
-  const response = await axios.post(paths.channelsPath(), newChannel, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
+  try {
+    const response = await axios.post(paths.channelsPath(), newChannel, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (addChannelError) {
+    console.error('addChannelError', addChannelError);
+  }
 });
 
 const removeChannel = createAsyncThunk('channels/removeChannel', async (id) => {
   const token = localStorage.getItem('token');
-
   try {
     const response = await axios.delete(`${paths.channelsPath()}/${id}`, {
       headers: {
@@ -46,7 +49,6 @@ const removeChannel = createAsyncThunk('channels/removeChannel', async (id) => {
 
 const renameChannel = createAsyncThunk('channels/renameChannel', async ({ id, name }) => {
   const token = localStorage.getItem('token');
-
   try {
     const response = await axios.patch(`${paths.channelsPath()}/${id}`, name, {
       headers: {
@@ -60,7 +62,6 @@ const renameChannel = createAsyncThunk('channels/renameChannel', async ({ id, na
 });
 
 /* eslint-disable-next-line no-param-reassign */
-
 const channelsSlice = createSlice({
   name: 'channels',
   initialState: {

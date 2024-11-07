@@ -12,7 +12,7 @@ import {
   FloatingLabel,
 } from 'react-bootstrap';
 import * as yup from 'yup';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import paths from '../serverRoutes';
@@ -43,7 +43,7 @@ const SignUp = () => {
     validationSchema: schema,
     validateOnChange: false,
 
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm, setErrors }) => {
       try {
         const response = await axios.post(paths.signupPath(), {
           username: values.username,
@@ -51,18 +51,22 @@ const SignUp = () => {
         });
         dispatch(login(response.data));
         navigate('/');
-        formik.resetForm();
+        resetForm();
       } catch (signupError) {
-        if (signupError.message === 'Network Error') {
-          console.log(t('errors.network'));
-        }
-
-        if (signupError.response.data.statusCode === 409) {
-          formik.setErrors({
-            username: ' ',
-            password: ' ',
-            confirmPassword: t('signup.alreadyExists'),
-          });
+        if (signupError instanceof AxiosError) {
+          if (!signupError.response) {
+            console.log(t('errors.network'));
+            return;
+          }
+          if (signupError.response.status === 409) {
+            setErrors({
+              username: ' ',
+              password: ' ',
+              confirmPassword: t('signup.alreadyExists'),
+            });
+          } else {
+            console.log(t('errors.unknownError'));
+          }
         }
       }
     },

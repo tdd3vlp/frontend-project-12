@@ -19,8 +19,8 @@ const ChannelsList = () => {
     dispatch(openRemoveChannelModal(channelId));
   };
 
-  const handleRenameChannel = (channelId, channelName) => {
-    dispatch(openRenameChannelModal(channelId, channelName));
+  const handleRenameChannel = (channel) => {
+    dispatch(openRenameChannelModal(channel));
   };
 
   return (

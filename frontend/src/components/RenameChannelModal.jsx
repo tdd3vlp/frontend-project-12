@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -42,13 +41,16 @@ const RenameChannelModal = () => {
     enableReinitialize: true,
     validationSchema: schema,
     validateOnChange: false,
-    onSubmit: (values) => {
-      const filteredName = Filter.clean(values.name);
-      values.name = filteredName;
-      dispatch(renameChannel({ id: channelId, name: values }));
+    onSubmit: (values, { resetForm }) => {
+      dispatch(renameChannel({ id: channelId, name: { name: Filter.clean(values.name) } }))
+        .then(() => {
+          toast.success(t('channels.renamed'));
+          resetForm();
+        })
+        .catch(() => {
+          toast.error(t('errors.network'));
+        });
       dispatch(closeRenameChannelModal());
-      toast.success(t('channels.renamed'));
-      formik.resetForm();
     },
   });
 

@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useRef, useEffect } from 'react';
 
-// eslint-disable-next-line react/prop-types
 const MessagesList = ({ channelId }) => {
   const messagesEndRef = useRef(null);
   const messages = useSelector((state) => state.messages.byId);
@@ -13,21 +12,19 @@ const MessagesList = ({ channelId }) => {
     }
   }, [messages]);
 
+  const filteredMessages = Object.values(messages)
+    .filter((message) => message.channelId === channelId);
+
   return (
     <div className="chat-messages overflow-auto px-5 " id="messages-box" ref={messagesEndRef}>
-      {Object.values(messages).map((message) => {
-        if (message.channelId === channelId) {
-          return (
-            <div className="text-break mb-2" key={message.id}>
-              <b>{message.username}</b>
-              :&nbsp;
-              {message.body}
-              <br />
-            </div>
-          );
-        }
-        return message.id === channelId;
-      })}
+      {filteredMessages.map((message) => (
+        <div className="text-break mb-2" key={message.id}>
+          <b>{message.username}</b>
+          :&nbsp;
+          {message.body}
+          <br />
+        </div>
+      ))}
     </div>
   );
 };
