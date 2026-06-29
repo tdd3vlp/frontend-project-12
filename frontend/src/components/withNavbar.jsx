@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Container, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { ChatDotsFill } from 'react-bootstrap-icons';
 import { logout } from '../features/auth/authSlice';
 
 const withNavbar = (WrappedComponent, hasLogoutButton) => {
@@ -17,13 +18,14 @@ const withNavbar = (WrappedComponent, hasLogoutButton) => {
 
     return (
       <div className="d-flex flex-column h-100" id="chat">
-        <Navbar variant="light" expand="lg" className="shadow-sm bg-white">
-          <Container>
+        <Navbar className="app-navbar" expand="lg">
+          <Container fluid="lg">
             <Navbar.Brand as={Link} to="/">
+              <ChatDotsFill className="brand-icon" size={17} />
               {t('hexletChat')}
             </Navbar.Brand>
             {hasLogoutButton && (
-              <Button variant="primary" onClick={handleLogout}>
+              <Button variant="outline-light" size="sm" onClick={handleLogout}>
                 {t('logout')}
               </Button>
             )}
@@ -33,7 +35,7 @@ const withNavbar = (WrappedComponent, hasLogoutButton) => {
       </div>
     );
   };
-  return <ComponentWithNav />;
+  return ComponentWithNav;
 };
 
 export default withNavbar;

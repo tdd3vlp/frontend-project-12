@@ -42,15 +42,16 @@ const RenameChannelModal = () => {
     validationSchema: schema,
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
-      dispatch(renameChannel({ id: channelId, name: { name: Filter.clean(values.name) } }))
+      dispatch(renameChannel({ id: channelId, name: Filter.clean(values.name) }))
+        .unwrap()
         .then(() => {
           toast.success(t('channels.renamed'));
           resetForm();
+          dispatch(closeRenameChannelModal());
         })
         .catch(() => {
           toast.error(t('errors.network'));
         });
-      dispatch(closeRenameChannelModal());
     },
   });
 

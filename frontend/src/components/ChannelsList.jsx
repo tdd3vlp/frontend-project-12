@@ -1,8 +1,7 @@
-import {
-  Nav, Button, ButtonGroup, Dropdown,
-} from 'react-bootstrap';
+import { Nav, Dropdown } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { ThreeDots } from 'react-bootstrap-icons';
 import { setActiveChannel } from '../features/channels/channelsSlice';
 import { openRemoveChannelModal, openRenameChannelModal } from '../features/modals/modalSlice';
 
@@ -11,65 +10,59 @@ const ChannelsList = () => {
   const { byId: channels, activeChannelId } = useSelector((state) => state.channels);
   const { t } = useTranslation();
 
-  const handleChannelClick = (channelId) => {
-    dispatch(setActiveChannel(channelId));
-  };
-
-  const handleRemoveChannel = (channelId) => {
-    dispatch(openRemoveChannelModal(channelId));
-  };
-
-  const handleRenameChannel = (channel) => {
-    dispatch(openRenameChannelModal(channel));
-  };
-
   return (
     <Nav
       as="ul"
       id="channels-box"
-      className="flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
+      className="flex-column mb-3 overflow-auto h-100 d-block"
     >
-      {Object.entries(channels).map(([channelId, channel]) => (
-        <Nav.Item as="li" key={channelId} className="w-100">
-          {channel.removable ? (
-            <Dropdown as={ButtonGroup} className="w-100">
-              <Button
-                variant={activeChannelId === channelId ? 'secondary' : 'light'}
-                className="w-100 rounded-0 text-start text-truncate"
-                onClick={() => handleChannelClick(channelId)}
-              >
-                <span className="me-1">#</span>
-                {channel.name}
-              </Button>
-              <Dropdown.Toggle
-                split
-                variant={activeChannelId === channelId ? 'secondary' : 'light'}
-              >
-                <span className="visually-hidden">{t('channels.menu')}</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => handleRemoveChannel(channelId)}>
-                  {t('channels.remove')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => handleRenameChannel({ id: channelId, name: channel.name })}
+      {Object.entries(channels).map(([channelId, channel]) => {
+        const isActive = activeChannelId === channelId;
+        return (
+          <Nav.Item as="li" key={channelId}>
+            {channel.removable ? (
+              <div className="channel-item-group">
+                <button
+                  type="button"
+                  className={`channel-btn${isActive ? ' is-active' : ''}`}
+                  onClick={() => dispatch(setActiveChannel(channelId))}
                 >
-                  {t('channels.rename')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          ) : (
-            <Button
-              variant={activeChannelId === channelId ? 'secondary' : 'light'}
-              className="w-100 rounded-0 text-start"
-              onClick={() => handleChannelClick(channelId)}
-            >
-              <span className="me-1">#</span>
-              {channel.name}
-            </Button>
-          )}
-        </Nav.Item>
-      ))}
+                  <span className="ch-hash">#</span>
+                  <span className="ch-name">{channel.name}</span>
+                </button>
+                <Dropdown align="end">
+                  <Dropdown.Toggle
+                    bsPrefix="channel-menu-btn"
+                    className={isActive ? 'is-active' : ''}
+                  >
+                    <ThreeDots size={13} />
+                    <span className="visually-hidden">{t('channels.menu')}</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => dispatch(openRemoveChannelModal(channelId))}>
+                      {t('channels.remove')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => dispatch(openRenameChannelModal({ id: channelId, name: channel.name }))}
+                    >
+                      {t('channels.rename')}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className={`channel-btn${isActive ? ' is-active' : ''}`}
+                onClick={() => dispatch(setActiveChannel(channelId))}
+              >
+                <span className="ch-hash">#</span>
+                <span className="ch-name">{channel.name}</span>
+              </button>
+            )}
+          </Nav.Item>
+        );
+      })}
     </Nav>
   );
 };

@@ -6,31 +6,27 @@ import paths from '../../serverRoutes';
 import fetchStatus from '../../utils/fetchStatus';
 import { removeChannel } from '../channels/channelsSlice';
 
-const fetchMessages = createAsyncThunk('messages/fetchMessages', async () => {
+const fetchMessages = createAsyncThunk('messages/fetchMessages', async (_, { rejectWithValue }) => {
   const token = localStorage.getItem('token');
   try {
     const response = await axios.get(paths.messagesPath(), {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
-  } catch (fetchMessagesError) {
-    console.error('fetchMessagesError', fetchMessagesError);
+  } catch (e) {
+    return rejectWithValue(e.response?.data ?? e.message);
   }
 });
 
-const addMessage = createAsyncThunk('messages/addMessage', async (newMessage) => {
+const addMessage = createAsyncThunk('messages/addMessage', async (newMessage, { rejectWithValue }) => {
+  const token = localStorage.getItem('token');
   try {
-    const token = localStorage.getItem('token');
     const response = await axios.post(paths.messagesPath(), newMessage, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
-  } catch (addMessageError) {
-    console.error('addMessageError', addMessageError);
+  } catch (e) {
+    return rejectWithValue(e.response?.data ?? e.message);
   }
 });
 

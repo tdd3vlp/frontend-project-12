@@ -34,7 +34,7 @@ const ru = {
       channelName: 'Имя канала',
       editChannelName: 'Новое имя канала',
     },
-    hexletChat: 'Hexlet Chat',
+    hexletChat: 'GetApp Messenger',
     logout: 'Выйти',
     chat: {
       send: 'Отправить',

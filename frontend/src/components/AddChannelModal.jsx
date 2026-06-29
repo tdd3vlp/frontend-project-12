@@ -32,14 +32,15 @@ const AddChannelModal = () => {
     validateOnChange: false,
     onSubmit: (values, { resetForm }) => {
       dispatch(addChannel({ name: Filter.clean(values.name) }))
+        .unwrap()
         .then(() => {
           toast.success(t('channels.created'));
           resetForm();
+          dispatch(closeAddChannelModal());
         })
         .catch(() => {
           toast.error(t('errors.network'));
         });
-      dispatch(closeAddChannelModal());
     },
   });
 

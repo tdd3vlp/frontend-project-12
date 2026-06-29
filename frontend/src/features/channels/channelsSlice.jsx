@@ -5,59 +5,51 @@ import axios from 'axios';
 import paths from '../../serverRoutes';
 import fetchStatus from '../../utils/fetchStatus';
 
-const fetchChannels = createAsyncThunk('channels/fetchChannels', async () => {
+const fetchChannels = createAsyncThunk('channels/fetchChannels', async (_, { rejectWithValue }) => {
   const token = localStorage.getItem('token');
   try {
     const response = await axios.get(paths.channelsPath(), {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
-  } catch (fetchChannelsError) {
-    console.error('fetchChannelsError', fetchChannelsError);
+  } catch (e) {
+    return rejectWithValue(e.response?.data ?? e.message);
   }
 });
 
-const addChannel = createAsyncThunk('channels/addChannel', async (newChannel) => {
+const addChannel = createAsyncThunk('channels/addChannel', async (newChannel, { rejectWithValue }) => {
   const token = localStorage.getItem('token');
   try {
     const response = await axios.post(paths.channelsPath(), newChannel, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
-  } catch (addChannelError) {
-    console.error('addChannelError', addChannelError);
+  } catch (e) {
+    return rejectWithValue(e.response?.data ?? e.message);
   }
 });
 
-const removeChannel = createAsyncThunk('channels/removeChannel', async (id) => {
+const removeChannel = createAsyncThunk('channels/removeChannel', async (id, { rejectWithValue }) => {
   const token = localStorage.getItem('token');
   try {
     const response = await axios.delete(`${paths.channelsPath()}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
-  } catch (removeChannelError) {
-    console.error('removeChannelError', removeChannelError);
+  } catch (e) {
+    return rejectWithValue(e.response?.data ?? e.message);
   }
 });
 
-const renameChannel = createAsyncThunk('channels/renameChannel', async ({ id, name }) => {
+const renameChannel = createAsyncThunk('channels/renameChannel', async ({ id, name }, { rejectWithValue }) => {
   const token = localStorage.getItem('token');
   try {
-    const response = await axios.patch(`${paths.channelsPath()}/${id}`, name, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await axios.patch(`${paths.channelsPath()}/${id}`, { name }, {
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
-  } catch (renameChannelError) {
-    console.error('renameChannelError', renameChannelError);
+  } catch (e) {
+    return rejectWithValue(e.response?.data ?? e.message);
   }
 });
 

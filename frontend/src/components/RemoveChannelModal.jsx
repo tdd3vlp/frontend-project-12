@@ -13,13 +13,14 @@ const RemoveChannelModal = () => {
   const handleRemove = () => {
     if (channelId) {
       dispatch(removeChannel(channelId))
+        .unwrap()
         .then(() => {
           toast.success(t('channels.removed'));
+          dispatch(closeRemoveChannelModal());
         })
         .catch(() => {
           toast.error(t('errors.network'));
         });
-      dispatch(closeRemoveChannelModal());
     }
   };
 

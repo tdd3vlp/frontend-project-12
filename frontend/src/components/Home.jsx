@@ -1,12 +1,10 @@
-import {
-  Container, Button, Row, Col, Form, InputGroup,
-} from 'react-bootstrap';
+import { Container, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useRef } from 'react';
 import Filter from 'leo-profanity';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { PlusSquare, ArrowRightSquare } from 'react-bootstrap-icons';
 import MessagesList from './MessagesList';
 import AddChannelModal from './AddChannelModal';
@@ -27,23 +25,16 @@ const Home = () => {
   const activeChannelId = useSelector((state) => state.channels.activeChannelId);
 
   const formik = useFormik({
-    initialValues: {
-      body: '',
-    },
+    initialValues: { body: '' },
     onSubmit: (values, { resetForm }) => {
-      dispatch(addMessage(
-        {
-          body: Filter.clean(values.body),
-          channelId: activeChannelId,
-          username: user,
-        },
-      ))
-        .then(() => {
-          resetForm();
-        })
-        .catch(() => {
-          console.log(t('errors.network'));
-        });
+      dispatch(addMessage({
+        body: Filter.clean(values.body),
+        channelId: activeChannelId,
+        username: user,
+      }))
+        .unwrap()
+        .then(() => resetForm())
+        .catch(() => toast.error(t('errors.network')));
     },
   });
 
@@ -54,77 +45,68 @@ const Home = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      inputRef.current.focus();
+      inputRef.current?.focus();
     }, 200);
   }, [activeChannelId]);
 
   return (
     <>
-      <Container className="h-100 my-4 overflow-hidden rounded shadow">
-        <Row className="h-100 bg-white flex-md-row">
-          <Col xs={4} md={2} className="border-end bg-light d-flex flex-column h-100 p-0">
-            <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-              <b>{t('channels.channels')}</b>
-              <Button
-                variant="link"
-                className="text-primary p-0 btn-group-vertical"
+      <Container fluid className="flex-grow-1 p-3 overflow-hidden d-flex" style={{ minHeight: 0 }}>
+        <div className="h-100 d-flex w-100 chat-window">
+          <div className="d-flex flex-column h-100 chat-sidebar">
+            <div className="sidebar-heading">
+              <span>{t('channels.channels')}</span>
+              <button
+                type="button"
+                className="sidebar-add-btn"
                 onClick={() => dispatch(openAddChannelModal())}
+                aria-label="Add channel"
               >
-                <PlusSquare size={20} />
-                <span className="visually-hidden">+</span>
-              </Button>
+                <PlusSquare size={18} />
+              </button>
             </div>
             <ChannelsList />
-          </Col>
-          <Col className="p-0 h-100">
-            <div className="d-flex flex-column h-100">
-              <div className="bg-light mb-4 p-3 shadow-sm small">
-                <p className="m-0">
-                  <b>
-                    #
-                    &nbsp;
-                    {activeChannel}
-                  </b>
-                </p>
-                <span className="text-muted">
-                  {messagesLength}
-                  &nbsp;
-                  {t('chat.messageCount', { count: messagesLength })}
-                </span>
+          </div>
+          <div className="d-flex flex-column flex-grow-1 h-100 overflow-hidden bg-white">
+            <div className="channel-header">
+              <div className="channel-header-name">
+                #&nbsp;
+                {activeChannel}
               </div>
-              <MessagesList channelId={activeChannelId} />
-              <div className="mt-auto px-5 py-3">
-                <Form noValidate className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
-                  <InputGroup hasValidation={!formik.values.body}>
-                    <Form.Control
-                      ref={inputRef}
-                      name="body"
-                      aria-label={t('chat.newMessage')}
-                      className="border-0 p-0 ps-2"
-                      placeholder={t('chat.enterMessage')}
-                      onChange={formik.handleChange}
-                      value={formik.values.body}
-                    />
-                    <Button
-                      type="submit"
-                      disabled={!formik.values.body || formik.isSubmitting}
-                      variant="outline-secondary"
-                      className="btn-group-vertical"
-                    >
-                      <ArrowRightSquare />
-                      <span className="visually-hidden">{t('chat.send')}</span>
-                    </Button>
-                  </InputGroup>
-                </Form>
+              <div className="channel-header-count">
+                {messagesLength}
+                &nbsp;
+                {t('chat.messageCount', { count: messagesLength })}
               </div>
             </div>
-          </Col>
-        </Row>
+            <MessagesList channelId={activeChannelId} />
+            <div className="message-form-wrap">
+              <Form noValidate className="message-form" onSubmit={formik.handleSubmit}>
+                <Form.Control
+                  ref={inputRef}
+                  name="body"
+                  aria-label={t('chat.newMessage')}
+                  placeholder={t('chat.enterMessage')}
+                  onChange={formik.handleChange}
+                  value={formik.values.body}
+                />
+                <button
+                  type="submit"
+                  disabled={!formik.values.body || formik.isSubmitting}
+                  className="msg-send-btn"
+                  aria-label={t('chat.send')}
+                >
+                  <ArrowRightSquare size={20} />
+                </button>
+              </Form>
+            </div>
+          </div>
+        </div>
       </Container>
       <AddChannelModal />
       <RemoveChannelModal />
       <RenameChannelModal />
-      <ToastContainer position="top-right" autoClose={7000} />
+      <ToastContainer position="top-right" autoClose={5000} />
     </>
   );
 };
